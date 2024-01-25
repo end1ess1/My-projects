@@ -5,7 +5,7 @@
 
 - 🌱 I’m currently learning **ClickHouse, Spark, Hadoop**
 
-- 👨‍💻 All of my projects are available at [https://github.com/end1ess1/My-projects/](https://github.com/end1ess1/My-projects/)
+- 👨‍💻 All of my projects are available at [https://github.com/end1ess1/My-projects/](https://github.com/end1ess1/end1ess1/)
 
 - 💬 Ask me about **something**
 
