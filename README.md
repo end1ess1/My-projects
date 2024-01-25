@@ -1,6 +1,8 @@
 <h1 align="center">Hi 👋, I'm Egor</h1>
 <h3 align="center">A passionate Data Analyst from Russia</h3>
 
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=Computer+science+student)](https://git.io/typing-svg)
+
 - 🔭 I’m currently working on [algorithmic trading](https://github.com/end1ess1/My-projects/tree/main/bybit_project)
 
 - 🌱 I’m currently learning **ClickHouse, Spark, Hadoop**
