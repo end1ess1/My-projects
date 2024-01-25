@@ -22,11 +22,7 @@
 - 📊 **A/B Testing** - dissecting the nuances of experimentation.
 
 
-- 🔭 I’m currently working on [algorithmic trading](https://github.com/end1ess1/My-projects/tree/main/bybit_project)
-
-- 🌱 I’m currently learning **ClickHouse, Spark, Hadoop**
-
-- 👨‍💻 All of my projects are available at [https://github.com/end1ess1/My-projects/](https://github.com/end1ess1/end1ess1/)
+🌌Dive into the creative abyss with me: e_abashin@inbox.ru awaits your signal!
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
