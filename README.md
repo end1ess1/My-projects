@@ -7,19 +7,19 @@
 
 🚀 Key Skills:
 
-- 🐍 Python and SQL - my languages of data communion.
+- 🐍 **Python and SQL** - my languages of data communion.
 
-- 📊 Pandas, Matplotlib, and Seaborn - my brushes, crafting visual tales of insight.
+- 📊 **Pandas, Matplotlib, and Seaborn** - my brushes, crafting visual tales of insight.
 
-- 📈 Statistical Analysis - where the magic of patterns unfolds.
+- 📈 **Statistical Analysis** - where the magic of patterns unfolds.
 
-- 💹 Financial Markets - navigating the data seas of finance.
+- 💹 **Financial Markets** - navigating the data seas of finance.
 
-- 🔄 ETL Processes - orchestrating the symphony of data extraction, transformation, and loading.
+- 🔄 **ETL Processes** - orchestrating the symphony of data extraction, transformation, and loading.
 
-- 🌐 API Wizardry - seamlessly connecting with the digital world.
+- 🌐 **API Wizardry** - seamlessly connecting with the digital world.
 
-- 📊 A/B Testing - dissecting the nuances of experimentation.
+- 📊 **A/B Testing** - dissecting the nuances of experimentation.
 
 
 - 🔭 I’m currently working on [algorithmic trading](https://github.com/end1ess1/My-projects/tree/main/bybit_project)
@@ -27,12 +27,6 @@
 - 🌱 I’m currently learning **ClickHouse, Spark, Hadoop**
 
 - 👨‍💻 All of my projects are available at [https://github.com/end1ess1/My-projects/](https://github.com/end1ess1/end1ess1/)
-
-- 💬 Ask me about **something**
-
-- 📫 How to reach me **e_abashin@inbox.ru**
-
-- ⚡ Fun fact **I've never been on Everest**
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
