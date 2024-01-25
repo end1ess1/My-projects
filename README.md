@@ -4,6 +4,17 @@
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=Welcome+to+my+Data+Wonderland+🚀)](https://git.io/typing-svg)
 
 👋Greetings, I'm Egor — a seasoned Data Alchemist with a love for numbers and a flair for code. My data-driven explorations extend from data wrangling to visualization, where I don't just transform digits, but weave cosmic tales from bits and bytes!
+
+🚀 Key Skills:
+
+🐍 Python and SQL - my languages of data communion.
+📊 Pandas, Matplotlib, and Seaborn - my brushes, crafting visual tales of insight.
+📈 Statistical Analysis - where the magic of patterns unfolds.
+💹 Financial Markets - navigating the data seas of finance.
+🔄 ETL Processes - orchestrating the symphony of data extraction, transformation, and loading.
+🌐 API Wizardry - seamlessly connecting with the digital world.
+📊 A/B Testing - dissecting the nuances of experimentation.
+
 - 🔭 I’m currently working on [algorithmic trading](https://github.com/end1ess1/My-projects/tree/main/bybit_project)
 
 - 🌱 I’m currently learning **ClickHouse, Spark, Hadoop**
