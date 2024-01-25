@@ -3,7 +3,7 @@
 
 - 🔭 I’m currently working on [algorithmic trading](https://github.com/end1ess1/My-projects/tree/main/bybit_project)
 
-- 🌱 I’m currently learning **ClickHouse, Apache Spark**
+- 🌱 I’m currently learning **ClickHouse, Spark, Hadoop**
 
 - 👨‍💻 All of my projects are available at [https://github.com/end1ess1/My-projects/](https://github.com/end1ess1/My-projects/)
 
