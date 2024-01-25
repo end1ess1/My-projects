@@ -5,8 +5,7 @@
 
 👋Greetings, I'm Egor — a seasoned Data Alchemist with a love for numbers and a flair for code. My data-driven explorations extend from data wrangling to visualization, where I don't just transform digits, but weave cosmic tales from bits and bytes!
 
-
-
+<h1></h1>
 
 🚀 Key Skills:
 
@@ -23,9 +22,6 @@
 - 🌐 **API Wizardry** - seamlessly connecting with the digital world.
 
 - 📊 **A/B Testing** - dissecting the nuances of experimentation.
-
-
-
 
 🌌Dive into the creative abyss with me: e_abashin@inbox.ru awaits your signal!
 
