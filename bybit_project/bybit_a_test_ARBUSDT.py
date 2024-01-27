@@ -339,13 +339,6 @@ def main():
         absorption_of_prev_kline(klines_data[:3])
         sleep(10)
 
-    # with open('test_data.txt', mode='a') as a:
-    #     for i in range(1, 13):
-    #         for each_trade in diary[str(i)]:
-    #             for each_parameter in each_trade:
-    #                 a.write(str(each_parameter)+' ')
-    #             a.write('\n')
-
 
 if __name__ == '__main__':
     main()
