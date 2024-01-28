@@ -3,6 +3,46 @@
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=def+activate_bot():+return+profit+💎)](https://git.io/typing-svg)
 
+🌍English Version
+
+💡 Project idea. 
+
+ㅤㅤThe idea behind this project originated from my desire to engage with financial indicators. However, despite extensive searches, I was unable to find suitable data, especially in open access. This led me to the decision to independently gather the necessary information. The concept was not just about using ready-made data from Bybit*, which could be obtained with a few lines of code over the entire history of the cryptocurrency (which was of little interest). Instead, it involved creating a trading bot.
+
+💻 Dataset. 
+
+ㅤㅤDuring the development stage, I utilized the Bybit* documentation and the Python programming language. After crafting the bot and devising trading strategies, I tested it on pseudo data. The bot could simulate trades by entering positions under specific conditions, managing them, and closing when necessary. Following successful testing, I was able to deploy it with real data, tracking five cryptocurrencies and executing trades based on predefined conditions. Thus, I compiled my own dataset, and the data was exported to Excel for further analysis.
+
+🔍 Analysis. 
+
+ㅤㅤThen, I decided to modify and refine the strategies to conduct A/B testing and determine which strategy yielded the highest profit. Data analysis involved elements of mathematics, statistics, and libraries such as Pandas, Matplotlib, and Seaborn. The datasets were analyzed, and the results proved to be extremely intriguing, in my opinion.
+
+<h1></h1>
+
+💼 Bybit* Exchange: [открыть](https://www.bybit.com/)
+
+📊 Analyzed data: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
+
+🤖 An example of a bot with conventional strategies: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
+
+🤖 An example of a bot with enhanced strategies: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
+
+📑 Trades executed by regular bots: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
+
+📑 Trades executed by enhanced bots: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+
+🛠️ An example function for placing a real order on the exchange: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+
+<h1></h1>
+
+⚠️ Warning! It is strongly advised not to use the data, strategies, and bot for actual trading on the market. The developed strategies are too simplistic and were solely used by me for the purpose of building a database to work with. Real-market trading demands a much more detailed refinement of strategies for successful participation. ⚠️
+
+<h1></h1>
+*Bybit - сryptocurrency trading exchange
+<h1></h1>
+
+🌍Русская версия
+
 💡 Идея проекта. 
 
 ㅤㅤИдея данного проекта зародилась из моего стремления взаимодействовать с финансовыми показателями. Однако, несмотря на продолжительные поиски, мне так и не удалось найти подходящие данные, особенно в открытом доступе. Это привело меня к решению самостоятельно собрать необходимую информацию. Идея заключалась не просто в использовании готовых данных от Bybit*, которые могли быть получены с помощью пары строк кода за всё прошедшее время проторгованой криптомонеты (что представляло мало интереса), а в создании торгового бота. 
@@ -38,3 +78,4 @@
 <h1></h1>
 *Bybit - биржа для торговли криптовалютой
 <h1></h1>
+
