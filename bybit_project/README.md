@@ -3,47 +3,10 @@
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=def+activate_bot():+return+profit+💎)](https://git.io/typing-svg)
 
-👋Greetings, I'm Egor — a seasoned Data Alchemist with a love for numbers and a flair for code. My data-driven explorations extend from data wrangling to visualization, where I don't just transform digits, but weave cosmic tales from bits and bytes!
+Идея данного проекта зародилась из моего стремления взаимодействовать с финансовыми показателями. Однако, несмотря на продолжительные поиски, мне так и не удалось найти подходящие данные, особенно в открытом доступе. Это привело меня к решению самостоятельно собрать необходимую информацию. Идея заключалась не просто в использовании готовых данных от Bybit, которые могли быть получены с помощью пары строк кода за всё прошедшее время проторгованой криптомонеты (что представляло мало интереса), а в создании торгового бота. Этот бот мог имитировать сделки, входя в позицию при определенных условиях, управляя ею и закрывая ее по необходимости.
+
+На начальном этапе я воспользовался документацией Bybit и языком программирования Python. Разработав бота и стратегии для торговли, я протестировал его на тестовых данных. После успешного тестирования я запустил его на реальных данных, отслеживая пять криптовалют и совершая сделки в соответствии с заранее определенными условиями. Таким образом, я собрал свой собственный датасет, данные которого были экспортированы в Excel для последующего анализа.
+
+Затем я принял решение изменить и доработать стратегии с целью провести А/Б тестирование и выяснить, какая стратегия показывает самый высокий профит. После этого данные были проанализированы, и результаты оказались, по моему мнению, чрезвычайно интересными. Анализ данных происходил с помощью элементов математики, статистики, а также библиотек Pandas, Matplotlib, Seaborn.
 
 <h1></h1>
-
-🚀 Key Skills:
-
-- 🐍 **Python and SQL** - my languages of data communion.
-
-- 📊 **Pandas, Matplotlib, and Seaborn** - my brushes, crafting visual tales of insight.
-
-- 📈 **Statistical Analysis** - where the magic of patterns unfolds.
-
-- 💹 **Financial Markets** - navigating the data seas of finance.
-
-- 🔄 **ETL Processes** - orchestrating the symphony of data extraction, transformation, and loading.
-
-- 🌐 **API Wizardry** - seamlessly connecting with the digital world.
-
-- 📊 **A/B Testing** - dissecting the nuances of experimentation.
-
-<h1></h1>
-
-🌌Dive into the creative abyss with me: e_abashin@inbox.ru awaits your signal!
-
-<h1></h1>
-
-💙Enter the pixelated universe with me, where our shared experiences paint a vibrant canvas of connection. Connect and let's craft the masterpiece of life together.
-
-<h1></h1>
-
-<h3 align="left">🌊Ride the IT wave! Connect for excellence:</h3>
-<p align="left">
-<a href="https://stackoverflow.com/users/23289551" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" alt="23289551" height="30" width="40" /></a>
-<a href="https://kaggle.com/end_1ess1" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/kaggle.svg" alt="end_1ess1" height="30" width="40" /></a>
-<a href="https://instagram.com/end_1ess__" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="end_1ess__" height="30" width="40" /></a>
-<a href="https://www.codechef.com/users/eabasin2" target="blank"><img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@3.1.0/icons/codechef.svg" alt="eabasin2" height="30" width="40" /></a>
-<a href="https://www.hackerrank.com/eabasin2" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/hackerrank.svg" alt="eabasin2" height="30" width="40" /></a>
-<a href="https://codeforces.com/profile/eabasin2" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/codeforces.svg" alt="eabasin2" height="30" width="40" /></a>
-<a href="https://www.leetcode.com/eabasin2" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="eabasin2" height="30" width="40" /></a>
-<a href="https://www.topcoder.com/members/end1ess" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/topcoder.svg" alt="end1ess" height="30" width="40" /></a>
-</p>
-
-<h3 align="left">🛠️Digital Arsenal:</h3>
-<p align="left"> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://www.mathworks.com/" target="_blank" rel="noreferrer"> <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" alt="matlab" width="40" height="40"/> </a> <a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a> <a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/2ae2a900d2f041da66e950e4d48052658d850630/icons/pandas/pandas-original.svg" alt="pandas" width="40" height="40"/> </a> <a href="https://www.photoshop.com/en" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/photoshop/photoshop-line.svg" alt="photoshop" width="40" height="40"/> </a> <a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://scikit-learn.org/" target="_blank" rel="noreferrer"> <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" alt="scikit_learn" width="40" height="40"/> </a> <a href="https://seaborn.pydata.org/" target="_blank" rel="noreferrer"> <img src="https://seaborn.pydata.org/_images/logo-mark-lightbg.svg" alt="seaborn" width="40" height="40"/> </a> </p>
