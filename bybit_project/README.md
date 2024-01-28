@@ -1,5 +1,6 @@
 <h1 align="center">Bybit project🚀</h1>
 <h3 align="center">Creating a trading bot and analyzing algorithmic trading.</h3>
+
 ㅤㅤㅤㅤ ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=def+activate_bot():+return+profit+💎)](https://git.io/typing-svg)
 <h3 align="center">🌍English Version</h3>
 
