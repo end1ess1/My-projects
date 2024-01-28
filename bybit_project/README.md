@@ -58,7 +58,7 @@
 
 💼 Биржа Bybit*: [открыть](https://www.bybit.com/)
 
-📊 Проанализированные данные: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
+📊 Анализ данных: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
 
 🤖 Пример бота с обычными стратегиями: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
 
