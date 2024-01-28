@@ -4,6 +4,8 @@
 ㅤㅤㅤㅤ ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=def+activate_bot():+return+profit+💎)](https://git.io/typing-svg)
 <h3 align="center">🌍English Version</h3>
 
+<h3></h3>
+
 💡 Project idea. 
 
 ㅤㅤThe idea behind this project originated from my desire to engage with financial indicators. However, despite extensive searches, I was unable to find suitable data, especially in open access. This led me to the decision to independently gather the necessary information. The concept was not just about using ready-made data from Bybit*, which could be obtained with a few lines of code over the entire history of the cryptocurrency (which was of little interest). Instead, it involved creating a trading bot.
