@@ -1,7 +1,7 @@
 <h1 align="center">Bybit project🚀</h1>
 <h3 align="center">Creating a trading bot and analyzing algorithmic trading.</h3>
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=Welcome+to+my+Data+Wonderland+🚀)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=print+\(+Hello+world+!+\))](https://git.io/typing-svg)
 
 👋Greetings, I'm Egor — a seasoned Data Alchemist with a love for numbers and a flair for code. My data-driven explorations extend from data wrangling to visualization, where I don't just transform digits, but weave cosmic tales from bits and bytes!
 
