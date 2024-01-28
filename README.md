@@ -29,7 +29,7 @@
 
 <h1></h1>
 
-✨My Symphony of Projects: [Portfolio](https://github.com/end1ess1/end1ess1)
+✨My Symphony of Projects: [Check out the Portfolio](https://github.com/end1ess1/end1ess1)
 
 <h1></h1>
 
