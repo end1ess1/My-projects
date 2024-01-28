@@ -18,19 +18,19 @@
 
 <h1></h1>
 
-💼 Bybit* Exchange: [открыть](https://www.bybit.com/)
+💼 Bybit* Exchange: [open](https://www.bybit.com/)
 
-📊 Analyzed data: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
+📊 Analyzed data: [open](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
 
-🤖 An example of a bot with conventional strategies: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
+🤖 An example of a bot with conventional strategies: [open](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
 
-🤖 An example of a bot with enhanced strategies: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
+🤖 An example of a bot with enhanced strategies: [open](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
 
-📑 Trades executed by regular bots: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
+📑 Trades executed by regular bots: [open](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
 
-📑 Trades executed by enhanced bots: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+📑 Trades executed by enhanced bots: [open](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
 
-🛠️ An example function for placing a real order on the exchange: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+🛠️ An example function for placing a real order on the exchange: [open](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
 
 <h1></h1>
 
