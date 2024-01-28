@@ -12,8 +12,19 @@
 *Bybit - биржа для торговли криптовалютой
 
 Биржа Bybit: [открыть](https://www.bybit.com/)
-Проанализированные данные: [открыть]()
-[]()
-[]()
-[]()
+
+Проанализированные данные: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
+
+Пример бота с обычными стратегиями: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
+
+Пример бота с улучшенными стратегиями: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
+
+Сделки, собранные обычными ботами: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
+
+Сделки, собранные улучшенными ботами: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+
+Пример функции для реального размещения ордела на бирже: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+
+
+Предупреждение! Крайне не рекомендуется использовать данные стратегии и бота для реальной торговли на рынке. Разработанные стратегии слишком просты и использовались мной исключительно для создания базы данных, с которой я мог бы работать. Торговля на реальном рынке требует гораздо более детальной проработки стратегий для успешного участия в нем.
 <h1></h1>
