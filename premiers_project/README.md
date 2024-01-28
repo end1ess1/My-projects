@@ -13,23 +13,23 @@
 
 <h1></h1>
 
-📊 Data Analysis: [открыть](https://www.bybit.com/)
+📊 Data Analysis: [open](https://github.com/end1ess1/end1ess1/blob/main/premiers_project/Premier_analysis.ipynb)
 
-🤖 Parsing Script: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+🤖 Parsing Script: [open](https://github.com/end1ess1/end1ess1/blob/main/premiers_project/premier_2023_data.py)
 
-🛠️ Script for Data Export to Excel: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+🛠️ Script for Data Export to Excel: [open](https://github.com/end1ess1/end1ess1/blob/main/premiers_project/premier_to_excel.py)
 
-💼 Overall Data Table: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
+💼 Overall Data Table: [open](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/premier_data_main.xlsx)
 
-📂 Subtable with Premiere Genres: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
+📂 Subtable with Premiere Genres: [open](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/genres_table.xlsx)
 
-📂 Subtable with Premiere Ratings: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
+📂 Subtable with Premiere Ratings: [open](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/ratings_table.xlsx)
 
-📂 Subtable with Each Premiere's Team: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
+📂 Subtable with Each Premiere's Team: [open](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/team_table.xlsx)
 
-📂 Subtable with Main Data for Each Premiere: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+📂 Subtable with Main Data for Each Premiere: [open](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/premiers_table.xlsx)
 
-📂 Subtable with Premiere Dates: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+📂 Subtable with Premiere Dates: [open](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/dates_table.xlsx)
 
 <h3 align="center">🌍 Russian Version.</h3>
 
@@ -39,20 +39,20 @@
 
 <h1></h1>
 
-📊 Анализ данных: [открыть](https://www.bybit.com/)
+📊 Анализ данных: [открыть](https://github.com/end1ess1/end1ess1/blob/main/premiers_project/Premier_analysis.ipynb)
 
-🤖 Скрипт-парсер: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+🤖 Скрипт-парсер: [открыть](https://github.com/end1ess1/end1ess1/blob/main/premiers_project/premier_2023_data.py)
 
-🛠️ Скрипт для выгрузки данных в Excel: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+🛠️ Скрипт для выгрузки данных в Excel: [открыть](https://github.com/end1ess1/end1ess1/blob/main/premiers_project/premier_to_excel.py)
 
-💼 Общая таблица данных: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
+💼 Общая таблица данных: [открыть](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/premier_data_main.xlsx)
 
-📂 Подтаблица с жанрами премьер: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
+📂 Подтаблица с жанрами премьер: [открыть](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/genres_table.xlsx)
 
-📂 Подтаблица с рейтингами премьер: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
+📂 Подтаблица с рейтингами премьер: [открыть](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/ratings_table.xlsx)
 
-📂 Подтаблица с командой каждой премьеры: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
+📂 Подтаблица с командой каждой премьеры: [открыть](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/team_table.xlsx)
 
-📂 Подтаблица с основными данными каждой премьеры: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+📂 Подтаблица с основными данными каждой премьеры: [открыть](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/premiers_table.xlsx)
 
-📂 Подтаблица с основными датами премьер: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+📂 Подтаблица с основными датами премьер: [открыть](https://github.com/end1ess1/end1ess1/raw/main/premiers_project/dates_table.xlsx)
