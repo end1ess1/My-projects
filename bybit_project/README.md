@@ -3,7 +3,7 @@
 
 ㅤㅤㅤㅤ ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=def+activate_bot():+return+profit+💎)](https://git.io/typing-svg)
 
-🌍English Version
+<h3 align="center">🌍English Version</h3>
 
 💡 Project idea. 
 
