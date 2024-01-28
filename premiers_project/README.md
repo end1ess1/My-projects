@@ -7,31 +7,29 @@
 
 <h3></h3>
 
-💡 Project. 
+💡 Project idea. 
 
-ㅤㅤThis is my first project, and I wanted to work with my own data. However, I was reluctant to use a ready-made dataset. That's why I decided to create my dataset for further analysis. For web scraping, I chose the Kinopoisk website, specifically the archive of premieres for the year 2023. I collected data using a Python script and the Requests library. After obtaining the overall dataframe (table), I decided to split it into sub-tables for convenience. Each table was responsible for specific film parameters. The main goal of the project was to analyze and identify correlations between different parameters of each film. Through this analysis, I aimed to discover growth points and perspectives in film creation.
-
-<h1></h1>
-
-💼 Main Data: [open](https://www.bybit.com/)
-
-📊 Analyzed data: [open](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
-
-🤖 An example of a bot with conventional strategies: [open](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
-
-🤖 An example of a bot with enhanced strategies: [open](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
-
-📑 Trades executed by regular bots: [open](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
-
-📑 Trades executed by enhanced bots: [open](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
-
-🛠️ An example function for placing a real order on the exchange: [open](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+ㅤㅤThis project marked my first step into the world of data analysis, and I aimed to utilize my own data. Steering clear of ready-made datasets, I focused on creating my own information base for further analysis. The Kinopoisk website, specifically the premiere archive for 2023, was chosen as the data source for web scraping. Information was gathered using a Python script and the Requests library, with data exported to Excel. After forming the overall dataframe (table), I divided it into subtables for ease of processing. Each subtable reflected specific film parameters. The project's main goal was the analysis and identification of correlations between various parameters of each film. I sought to identify growth points and prospects in the creation of cinematic works.
 
 <h1></h1>
 
-⚠️ Warning! It is strongly advised not to use the data, strategies, and bot for actual trading on the market. The developed strategies are too simplistic and were solely used by me for the purpose of building a database to work with. Real-market trading demands a much more detailed refinement of strategies for successful participation. ⚠️
+📊 Data Analysis: [открыть](https://www.bybit.com/)
 
-*Bybit - сryptocurrency trading exchange
+🤖 Parsing Script: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+
+🛠️ Script for Data Export to Excel: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+
+💼 Overall Data Table: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
+
+📂 Subtable with Premiere Genres: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
+
+📂 Subtable with Premiere Ratings: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
+
+📂 Subtable with Each Premiere's Team: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
+
+📂 Subtable with Main Data for Each Premiere: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+
+📂 Subtable with Premiere Dates: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
 
 <h3 align="center">🌍 Russian Version.</h3>
 
@@ -41,22 +39,20 @@
 
 <h1></h1>
 
-💼 Биржа Bybit*: [открыть](https://www.bybit.com/)
+📊 Анализ данных: [открыть](https://www.bybit.com/)
 
-📊 Анализ данных: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
+🤖 Скрипт-парсер: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
 
-🤖 Пример бота с обычными стратегиями: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
+🛠️ Скрипт для выгрузки данных в Excel: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
 
-🤖 Пример бота с улучшенными стратегиями: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
+💼 Общая таблица данных: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/Bybit_analysis.ipynb)
 
-📑 Сделки, собранные обычными ботами: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
+📂 Подтаблица с жанрами премьер: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_a_test_ARBUSDT.py)
 
-📑 Сделки, собранные улучшенными ботами: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+📂 Подтаблица с рейтингами премьер: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/bybit_b_test_ARBUSDT.py)
 
-🛠️ Пример функции для реального размещения ордела на бирже: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
+📂 Подтаблица с командой каждой премьеры: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
 
-<h1></h1>
+📂 Подтаблица с основными данными каждой премьеры: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
 
-⚠️ Предупреждение! Крайне не рекомендуется использовать данные стратегии и бота для реальной торговли на рынке. Разработанные стратегии слишком просты и использовались мной исключительно для создания базы данных, с которой я мог бы работать. Торговля на реальном рынке требует более детальной проработки стратегий для успешной торговли на нем. ⚠️
-
-*Bybit - биржа для торговли криптовалютой.
+📂 Подтаблица с основными датами премьер: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
