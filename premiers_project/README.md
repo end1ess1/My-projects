@@ -1,4 +1,4 @@
-<h1 align="center">What's shaking? 👋, I'm Egor</h1>
+<h1 align="center">Premiers project🚀</h1>
 <h3 align="center">A seasoned Data Alchemist turning raw data into digital gold.</h3>
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=Welcome+to+my+Data+Wonderland+🚀)](https://git.io/typing-svg)
