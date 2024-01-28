@@ -38,9 +38,8 @@
 
 <h1></h1>
 *Bybit - сryptocurrency trading exchange
-<h1></h1>
 
-🌍Русская версия
+<h3 align="center">🌍Russian Version</h3>
 
 💡 Идея проекта. 
 
