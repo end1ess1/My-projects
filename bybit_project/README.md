@@ -19,7 +19,7 @@
 
 📑 Сделки, собранные обычными ботами: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/Common%20Bybit%20Data.xlsx)
 
-📑 Сделки, собранные улучшенными ботами: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
+📑 Сделки, собранные улучшенными ботами: [открыть](https://github.com/end1ess1/end1ess1/raw/main/bybit_project/B%20Test%20Bybit%20Data.xlsx)
 
 🛠️ Пример функции для реального размещения ордела на бирже: [открыть](https://github.com/end1ess1/end1ess1/blob/main/bybit_project/place_order.py)
 
