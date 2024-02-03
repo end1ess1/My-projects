@@ -6,9 +6,9 @@ from file import key, secret
 
 # CONNECTION
 session = HTTP(
-    testnet=False,
-    api_key=key,
-    api_secret=secret
+    testnet = False,
+    api_key = key,
+    api_secret = secret
 )
 
 # COIN
