@@ -2,12 +2,13 @@ from pybit.unified_trading import HTTP
 import numpy as np
 from time import sleep
 from datetime import datetime
+from file import key, secret
 
 # CONNECTION
 session = HTTP(
     testnet=False,
-    api_key='vcMzbbmQ4dIAxG3lxd',
-    api_secret='lAiphaYt1wtprs49DieTHzYzttNVgOhVKaC7'
+    api_key=key,
+    api_secret=secret
 )
 
 # COIN
