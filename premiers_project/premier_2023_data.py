@@ -2,9 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 from time import sleep
 
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
-           'Referer': 'https://www.kinoafisha.info/',
-           'Origin': 'https://www.kinoafisha.info'}
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+    'Referer': 'https://www.kinoafisha.info/',
+    'Origin': 'https://www.kinoafisha.info'}
 
 url = 'https://www.kinoafisha.info/releases/archive/2023/'
 response = requests.get(url, headers=headers)
@@ -67,7 +68,7 @@ def array():
         producer_and_actors = to_list(
             soup_page.find_all('span', class_='badgeList_name'))
         if len(producer_and_actors) < 2:
-            producer_and_actors += (['NULL']*(2-len(producer_and_actors)))
+            producer_and_actors += (['NULL'] * (2 - len(producer_and_actors)))
 
         # Cловарь из дополнительных атрибутов
         data_info = {'Продолжительность': 'NULL',
