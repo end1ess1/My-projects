@@ -1,5 +1,0 @@
-SYMBOL = 'ARBUSDT'
-INTERVAL = 1
-INTERVAL_NAME = 'min'
-step = 0.0001
-time = '18:00:00'
