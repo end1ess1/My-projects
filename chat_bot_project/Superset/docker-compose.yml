@@ -1,0 +1,42 @@
+services:
+  superset:
+    image: apache/superset:latest
+    env_file:
+      - path: ./.env # default
+        required: true
+    container_name: superset
+    user: "root"
+    restart: unless-stopped
+    ports:
+      - 8080:8088
+    volumes:
+      - ./superset_config.py:/app/pythonpath/superset_config.py
+      - superset_home:/app/superset_home
+    networks:
+      - superset_apps_network
+    command:
+      - /bin/bash
+      - -c
+      - |
+        superset fab create-admin \
+          --username admin \
+          --password admin \
+          --firstname Egor \
+          --lastname Abashin \
+          --email e_abashin@inbox.ru &&
+        superset db upgrade &&
+        superset init &&
+        superset run -h 0.0.0.0 -p 8088 &&
+        superset apt-get update &&
+        apt-get install -y gcc libpq-dev &&
+        pip install psycopg2
+volumes:
+  superset_home:
+    external: false
+
+networks:
+  superset_apps_network:
+    driver: bridge
+    name: apps_network
+    external: true
+

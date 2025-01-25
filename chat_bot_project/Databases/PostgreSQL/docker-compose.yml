@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: library/postgres:14
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: preprod_db
+    ports:
+      - '5432:5432'
+    restart: always
+    networks:
+      - p_apps_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin-volume:/var/lib/pgadmin
+    ports:
+      - '5050:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@pg.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+    networks:
+      - p_apps_network
+  
+volumes:
+  postgres-volume:
+  pgadmin-volume:
+
+networks:
+  p_apps_network:
+    driver: bridge
+    name: apps_network
+    external: true

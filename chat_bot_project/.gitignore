@@ -1,0 +1,10 @@
+# Environments
+/venv/
+
+# PyCache
+/__pycache__/
+
+# Private Files
+/Scripts/commands.sh
+/Scripts/private_file.py
+/Scripts/project.py
