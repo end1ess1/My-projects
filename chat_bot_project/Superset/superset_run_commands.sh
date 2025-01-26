@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Создание администратора Superset
+# Создаем админа
 superset fab create-admin \
   --username admin \
   --password admin \
@@ -8,20 +8,11 @@ superset fab create-admin \
   --lastname Abashin \
   --email e_abashin@inbox.ru
 
-# Обновление базы данных Superset
+# Обновляем БД
 superset db upgrade
 
-# Инициализация Superset
+# Инициализируем
 superset init
 
-# Обновление системных пакетов
-apt-get update
-
-# Установка необходимых библиотек для работы с PosgtreSQL
-apt-get install -y gcc libpq-dev
-
-# Установка модуля psycopg2
-pip install psycopg2
-
-# Запуск сервера Superset
+# Запускем сервера Superset
 superset run -h 0.0.0.0 -p 8088

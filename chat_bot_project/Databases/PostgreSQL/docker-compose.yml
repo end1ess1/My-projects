@@ -1,6 +1,7 @@
 services:
   postgres:
     image: library/postgres:14
+    container_name: postgres
     volumes:
       - postgres-volume:/var/lib/postgresql/data
     environment:
@@ -12,9 +13,15 @@ services:
     restart: always
     networks:
       - p_apps_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: pdadmin4
     volumes:
       - pgadmin-volume:/var/lib/pgadmin
     ports:
@@ -26,6 +33,12 @@ services:
       - postgres
     networks:
       - p_apps_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
   
 volumes:
   postgres-volume:

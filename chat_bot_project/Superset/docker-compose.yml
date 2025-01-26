@@ -1,8 +1,11 @@
 services:
   superset:
+    build:
+      context: .
+      dockerfile: dockerFile
     image: apache/superset:latest
     env_file:
-      - path: ./.env # default
+      - path: ./.env
         required: true
     container_name: superset
     user: "root"
@@ -11,25 +14,13 @@ services:
       - 8080:8088
     volumes:
       - ./superset_config.py:/app/pythonpath/superset_config.py
+      - ./superset_run_commands.sh:/app/superset_run_commands.sh
+      - C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Databases\Redis\redis_db_mapping.py:/app/pythonpath/redis_db_mapping.py
       - superset_home:/app/superset_home
     networks:
       - superset_apps_network
-    command:
-      - /bin/bash
-      - -c
-      - |
-        superset fab create-admin \
-          --username admin \
-          --password admin \
-          --firstname Egor \
-          --lastname Abashin \
-          --email e_abashin@inbox.ru &&
-        superset db upgrade &&
-        superset init &&
-        superset run -h 0.0.0.0 -p 8088 &&
-        superset apt-get update &&
-        apt-get install -y gcc libpq-dev &&
-        pip install psycopg2
+    command: /bin/bash /app/superset_run_commands.sh
+
 volumes:
   superset_home:
     external: false
@@ -39,4 +30,3 @@ networks:
     driver: bridge
     name: apps_network
     external: true
-

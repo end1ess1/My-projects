@@ -5,6 +5,9 @@
 /__pycache__/
 
 # Private Files
-/Scripts/commands.sh
-/Scripts/private_file.py
-/Scripts/project.py
+Airflow/scripts/commands.sh
+Airflow/scripts/private_file.py
+Airflow/scripts/project.py
+
+# Airflow
+Airflow/logs

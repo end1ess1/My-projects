@@ -3,6 +3,7 @@ from lib import Log
 from time import sleep
 import redis
 from rich.traceback import install
+from Databases.Redis.redis_db_mapping import redis_db
 install(show_locals=True)
 
 postgre_db_params = {
@@ -14,7 +15,7 @@ postgre_db_params = {
 }
 
 redis_db_params = {
-    'db': '0',
+    'db': redis_db['postgres'],
     'host': 'localhost',
     'port': '6379'
 }
