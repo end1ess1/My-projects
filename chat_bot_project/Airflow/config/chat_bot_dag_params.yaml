@@ -1,0 +1,35 @@
+---
+task_vars:
+  table: data_table
+  date: "2025-02-01"
+  environment: production
+
+dag_vars:
+  apps:
+    - preprocess_data.py
+    - train_model.py
+    - validate_model.py
+    - deploy_model.py
+  libs:
+    - utils.py
+    - secrets_handler.py
+
+dag_kwargs:
+  description: Модельный пайплайн для продакшна
+  schedule_interval: 0 4 * * *
+  catchup: false
+  default_args:
+    start_date: "2025-01-01"
+    retry_delay: 120
+    owner: abas
+    retries: 3
+    email_on_failure: true
+    email: 
+      - e_abashin@inbox.ru
+      - ewreht@inbox.ru
+  tags:
+    - production
+    - telegram_bot
+    - v1.0.0
+
+...

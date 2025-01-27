@@ -5,6 +5,8 @@ services:
     ports:
       - '6379:6379'
     restart: always
+    volumes:
+      - redis-volume:/data
     networks:
       - redis_apps_network
     healthcheck:
@@ -13,6 +15,10 @@ services:
       timeout: 30s
       retries: 50
       start_period: 30s
+
+volumes:
+  redis-volume:
+    name: redis-volume
 
 networks:
   redis_apps_network:

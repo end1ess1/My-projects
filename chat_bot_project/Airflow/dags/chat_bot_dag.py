@@ -1,38 +1,40 @@
-# Version 0.0.1
-
-# Разработчик
-# Документация
-# Универ / Диплом / МИИГАИК / Тема
-
 from airflow import DAG
-from airflow.providers import PythonOperator
-
-import os 
-import sys
+from airflow.operators.python import PythonOperator
+from airflow.operators.dummy import DummyOperator
 import yaml
-import pathlib
+import sys
+import os
 
-
-file_path = pathlib.Path(__file__)
-DAG_ID = '9999'
+#AG_ID = '1642_77_'
 DAG_NAME = 'chat_bot_dag'
 SCRIPTS_PATH = os.getenv("AIRFLOW_VAR_SCRIPTS", '/opt/airflow/scripts')
+CONFIG_PATH = os.getenv("AIRFLOW_VAR_CONFIG", '/opt/airflow/config')
 
-with open(os.path.join(SCRIPTS_PATH, f'{DAG_NAME}_params.yaml'), 'r') as ff:
+sys.path.append(SCRIPTS_PATH)
+sys.path.append(CONFIG_PATH)
+
+from testik import create_file
+
+with open(os.path.join(CONFIG_PATH, f'{DAG_NAME}_params.yaml'), 'r') as ff:
     dag_config = yaml.full_load(ff)
-    
-application_args = [
-    k 
-    for pair in [
-        ['--' + i, j]
-        for i, j in dag_config['task_vars'].items()
-        if j is not None
-    ]
-    for k in pair
-]
 
-apps = dag_config['dag_vars']['apps']
-libs = dag_config['dag_vars']['libs']
+# Определение DAG
+with DAG(DAG_NAME, **dag_config['dag_kwargs']) as dag:
+    # Оператор Dummy
+    start = DummyOperator(
+        task_id='start'
+    )
 
-with DAG(DAG_ID, **dag_config['dag_kwargs']) as dag:
-    pass
+    # Оператор Python
+    execute_script = PythonOperator(
+        task_id='run_python_script',
+        python_callable=create_file  # Передаем функцию
+    )
+
+    # Еще один Dummy
+    end = DummyOperator(
+        task_id='end'
+    )
+
+    # Установка последовательности выполнения
+    start >> execute_script >> end

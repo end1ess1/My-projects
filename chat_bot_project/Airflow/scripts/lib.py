@@ -35,9 +35,6 @@ class ModelArgs(metaclass=MetaClass):
             parser.add_argument(f'--{field.name}', type=field.type, help=cls.__description__[field.name])
         return parser.parse_args()
 
-args = ModelArgs.parse_base_args()
-print(args)
-
 
 class Log(metaclass=MetaClass):
     posgtresql_conn: psycopg2.extensions.connection
@@ -71,6 +68,8 @@ class Log(metaclass=MetaClass):
              
             for col in __comments__:
                 cur.execute(f"COMMENT ON COLUMN {self.log_table_name}.{col} IS '{__comments__[col]}'")
+            
+            cur.execute(f"COMMENT ON TABLE {self.log_table_name}.{col} IS 'Таблица для логирования скриптов'")
             
             self.posgtresql_conn.commit()
 

@@ -10,4 +10,8 @@ Airflow/scripts/private_file.py
 Airflow/scripts/project.py
 
 # Airflow
+Airflow/.env
 Airflow/logs
+
+# Superset
+Superset/.env

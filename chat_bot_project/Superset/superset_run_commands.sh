@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Отладка файлов
+ls /app/pythonpath/
+
 # Создаем админа
 superset fab create-admin \
   --username admin \
