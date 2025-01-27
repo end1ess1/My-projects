@@ -13,7 +13,6 @@ prompt = "Привет! Расскажи о чем хочешь"
 # retrieved_context = search_documents(prompt)
 # context = format_history(chat_history) + f"\n{retrieved_context}\nUser: {prompt}\nAI:"
 
-
 def get_model_answer(prompt, url: str=url):
     # URL сервера llama.cpp (замени на свой адрес и порт)
     # url = "http://localhost:5000/completion"
@@ -37,3 +36,6 @@ def get_model_answer(prompt, url: str=url):
     else:
         print("Ошибка:", response.status_code, response.text)
         return None
+
+def get_model_answer(prompt, url: str=url):
+    return 'Some Answer'

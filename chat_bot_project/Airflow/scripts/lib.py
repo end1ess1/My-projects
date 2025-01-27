@@ -12,12 +12,11 @@ class MetaClass(type):
         return dataclass(old)
 
 class ModelArgs(metaclass=MetaClass):
-    
+
     __description__ = {
         's': 'Something descrp'
     }
-    
-    
+
     __mapping__ = {
         int: int,
         str: str,
@@ -25,9 +24,9 @@ class ModelArgs(metaclass=MetaClass):
         list: str,
         bool: bool
     }
-    
+
     s: str
-    
+
     @classmethod
     def parse_base_args(cls):
         parser = argparse.ArgumentParser('Параметры для модели')
@@ -128,8 +127,74 @@ class Log(metaclass=MetaClass):
         
     def finish(self, comment: str='Завершение работы', level: str='finish')  -> None:
         
-        self.posgtresql_conn.close()
         self.insert(comment, level)
+        self.posgtresql_conn.close()
+        self.redis_conn.close()
+    
+    ###
+
+    def insert_llm_log(self, user_id: str, first_name: str, last_name: str, username: str, chat_id: str,
+                       question: str, answer: str, question_date: datetime, answer_date: datetime,
+                       question_language: str, answer_language: str, model_version: str, table_name: str) -> str:
+        with self.posgtresql_conn.cursor() as cur:
+            cur.execute(f"""
+                INSERT INTO {table_name} (
+                    user_id,
+                    first_name,
+                    last_name,
+                    username,
+                    chat_id,
+                    question,
+                    answer,
+                    question_length,
+                    answer_length,
+                    response_time_s,
+                    question_language,
+                    answer_language,
+                    question_date,
+                    answer_date,
+                    model_version
+                )
+                VALUES (
+                    '{user_id}',
+                    '{first_name}',
+                    '{last_name}',
+                    '{username}',
+                    '{chat_id}',
+                    '{question}',
+                    '{answer}',
+                    '{len(question)}',
+                    '{len(answer)}',
+                    '{str((answer_date-question_date).total_seconds())}',
+                    '{question_language}',
+                    '{answer_language}',
+                    '{str(question_date)}',
+                    '{str(answer_date)}',
+                    '{model_version}',
+                );
+            """)
+            
+            self.posgtresql_conn.commit()
+
+        __logs_entry__ = {
+            'user_id': user_id,
+            'first_name': first_name,
+            'last_name': last_name,
+            'username': username,
+            'chat_id': chat_id,
+            'question': question,
+            'answer': answer,
+            'question_length': len(question),
+            'answer_length': len(answer),
+            'response_time_s': str((answer_date-question_date).total_seconds()),
+            'question_language': question_language,
+            'answer_language': answer_language,
+            'question_date': question_date,
+            'answer_date': answer_date
+        }
+
+        self.redis_conn.hset(name=model_version, mapping=__logs_entry__)
+        self.redis_conn.expire(name=model_version, time=86400)
 
 
 class LogRetriever(metaclass=MetaClass):
@@ -146,6 +211,7 @@ class LogRetriever(metaclass=MetaClass):
                 cur.execute(f"SELECT * FROM {Log.log_table_name} WHERE key = {key}")
                 logs = cur.fetchall()
             return logs or "Логи не найдены."
+
 
 
         

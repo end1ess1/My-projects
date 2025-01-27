@@ -2,6 +2,7 @@
     "redis_db": {
         "postgres": "0",
         "superset": "1",
-        "airflow": "2"
+        "airflow": "2",
+        "telegram": "3"
     }
 }
