@@ -1,5 +1,4 @@
-\c telegram_bot_db -- Переключились на нужную БД
-
+-- Таблица для логирования модели
 CREATE TABLE llm_logs (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
@@ -16,7 +15,7 @@ CREATE TABLE llm_logs (
     user_feedback_score INT,
     request_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     response_timestamp TIMESTAMP NOT NULL,
-    model_version VARCHAR(50),
+    model_version VARCHAR(50)
 );
 
 COMMENT ON TABLE llm_logs IS 'Таблица для анализа взаимодействий пользователей с LLM моделью';

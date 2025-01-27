@@ -33,11 +33,11 @@ echo UP DOCKER CONTAINERS:
 docker-compose -f Databases/PostgreSQL/docker-compose.yml up -d
 docker-compose -f Databases/Redis/docker-compose.yml up -d
 
-# docker-compose -f Superset/docker-compose.yml build
-# docker-compose -f Superset/docker-compose.yml up -d
+docker-compose -f Superset/docker-compose.yml build
+docker-compose -f Superset/docker-compose.yml up -d
 
-# docker-compose -f Airfow/docker-compose.yml up airflow-init -d
-# docker-compose -f Airfow/docker-compose.yml up -d
+docker-compose -f Airfow/docker-compose.yml up airflow-init -d
+docker-compose -f Airfow/docker-compose.yml up -d
 
 echo ACTIVE CONTAINERS LIST:
 docker ps
