@@ -22,3 +22,6 @@ GRANT CONNECT ON DATABASE telegram_bot_db TO telegram_bot_admin;
 GRANT ALL PRIVILEGES ON DATABASE superset_db TO superset_admin;
 GRANT ALL PRIVILEGES ON DATABASE airflow_db TO airflow_admin;
 GRANT ALL PRIVILEGES ON DATABASE telegram_bot_db TO telegram_bot_admin;
+
+GRANT USAGE ON SCHEMA public TO telegram_bot_admin;
+GRANT CREATE ON SCHEMA public TO telegram_bot_admin;

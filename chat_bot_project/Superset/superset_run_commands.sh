@@ -3,10 +3,6 @@
 # Отладка файлов
 ls /app/pythonpath/
 
-# Ожидаем пока БД полностью загрузится
-echo "SLEEP"
-sleep 15
-
 # Создаем админа
 superset fab create-admin \
   --username admin \

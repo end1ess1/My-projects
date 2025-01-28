@@ -46,7 +46,7 @@ DP = Dispatcher()
 @handle_errors
 async def log_message(message: Message, answer: str, question_date: datetime, answer_date: datetime):
         logging.insert_llm_log(
-            user_id=message.from_user.user_id,
+            user_id=message.from_user.id,
             first_name=message.from_user.first_name,
             last_name=message.from_user.last_name,
             username=message.from_user.username,

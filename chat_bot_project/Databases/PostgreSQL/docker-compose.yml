@@ -17,7 +17,6 @@ services:
       test: ["CMD", "pg_isready", "-U", "super_user", "-d", "telegram_bot_db"]
       interval: 10s
       retries: 5
-      start_period: 5s
 
   pgadmin:
     image: dpage/pgadmin4

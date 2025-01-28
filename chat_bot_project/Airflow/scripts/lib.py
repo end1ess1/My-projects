@@ -36,7 +36,7 @@ class ModelArgs(metaclass=MetaClass):
 
 
 class Log(metaclass=MetaClass):
-    posgtresql_conn: psycopg2.extensions.connection
+    postgresql_conn: psycopg2.extensions.connection
     redis_conn: redis.client.Redis
     script_name : str
     log_table_name: str='scripts_logs'
@@ -54,7 +54,7 @@ class Log(metaclass=MetaClass):
             'comment': 'Комментарий (может быть NULL)'
         }
 
-        with self.posgtresql_conn.cursor() as cur:
+        with self.postgresql_conn.cursor() as cur:
             cur.execute(f"""
                         CREATE TABLE IF NOT EXISTS {self.log_table_name} (
                             id SERIAL PRIMARY KEY,
@@ -64,13 +64,13 @@ class Log(metaclass=MetaClass):
                             comment TEXT
                         );
                         """)
-             
+            
             for col in __comments__:
                 cur.execute(f"COMMENT ON COLUMN {self.log_table_name}.{col} IS '{__comments__[col]}'")
             
-            cur.execute(f"COMMENT ON TABLE {self.log_table_name}.{col} IS 'Таблица для логирования скриптов'")
+            cur.execute(f"COMMENT ON TABLE {self.log_table_name} IS 'Таблица для логирования скриптов'")
             
-            self.posgtresql_conn.commit()
+            self.postgresql_conn.commit()
 
 
     def _redis_caching_expire(self, comment: str, level: str):
@@ -85,7 +85,7 @@ class Log(metaclass=MetaClass):
     
     
     def insert(self, comment: str, level: str) -> None:
-        with self.posgtresql_conn.cursor() as cur:
+        with self.postgresql_conn.cursor() as cur:
             cur.execute(f"""
                         INSERT INTO {self.log_table_name} (
                             script_name,
@@ -101,7 +101,7 @@ class Log(metaclass=MetaClass):
                         );"""
                         )
         
-            self.posgtresql_conn.commit()
+            self.postgresql_conn.commit()
         
         self._redis_caching_expire(comment=comment, level=level)
     
@@ -128,17 +128,17 @@ class Log(metaclass=MetaClass):
     def finish(self, comment: str='Завершение работы', level: str='finish')  -> None:
         
         self.insert(comment, level)
-        self.posgtresql_conn.close()
+        self.postgresql_conn.close()
         self.redis_conn.close()
     
     ###
 
     def insert_llm_log(self, user_id: str, first_name: str, last_name: str, username: str, chat_id: str,
                        question: str, answer: str, question_date: datetime, answer_date: datetime,
-                       question_language: str, answer_language: str, model_version: str, table_name: str) -> str:
-        with self.posgtresql_conn.cursor() as cur:
+                       language_code: str, model_version: str, log_table_name: str) -> str:
+        with self.postgresql_conn.cursor() as cur:
             cur.execute(f"""
-                INSERT INTO {table_name} (
+                INSERT INTO {log_table_name} (
                     user_id,
                     first_name,
                     last_name,
@@ -149,48 +149,45 @@ class Log(metaclass=MetaClass):
                     question_length,
                     answer_length,
                     response_time_s,
-                    question_language,
-                    answer_language,
+                    language_code,
                     question_date,
                     answer_date,
                     model_version
                 )
                 VALUES (
                     '{user_id}',
-                    '{first_name}',
-                    '{last_name}',
-                    '{username}',
+                    '{str(first_name)}',
+                    '{str(last_name)}',
+                    '{str(username)}',
                     '{chat_id}',
-                    '{question}',
-                    '{answer}',
-                    '{len(question)}',
-                    '{len(answer)}',
-                    '{str((answer_date-question_date).total_seconds())}',
-                    '{question_language}',
-                    '{answer_language}',
-                    '{str(question_date)}',
-                    '{str(answer_date)}',
-                    '{model_version}',
+                    '{str(question)}',
+                    '{str(answer)}',
+                    '{str(len(question))}',
+                    '{str(len(answer))}',
+                    '{(answer_date-question_date).total_seconds()}',
+                    '{str(language_code)}',
+                    '{question_date}',
+                    '{answer_date}',
+                    '{str(model_version)}'
                 );
             """)
             
-            self.posgtresql_conn.commit()
+            self.postgresql_conn.commit()
 
         __logs_entry__ = {
-            'user_id': user_id,
-            'first_name': first_name,
-            'last_name': last_name,
-            'username': username,
-            'chat_id': chat_id,
-            'question': question,
-            'answer': answer,
-            'question_length': len(question),
-            'answer_length': len(answer),
+            'user_id': str(user_id),
+            'first_name': str(first_name),
+            'last_name': str(last_name),
+            'username': str(username),
+            'chat_id': str(chat_id),
+            'question': str(question),
+            'answer': str(answer),
+            'question_length': str(len(question)),
+            'answer_length': str(len(answer)),
             'response_time_s': str((answer_date-question_date).total_seconds()),
-            'question_language': question_language,
-            'answer_language': answer_language,
-            'question_date': question_date,
-            'answer_date': answer_date
+            'language_code': str(language_code),
+            'question_date': str(question_date),
+            'answer_date': str(answer_date)
         }
 
         self.redis_conn.hset(name=model_version, mapping=__logs_entry__)
@@ -198,7 +195,7 @@ class Log(metaclass=MetaClass):
 
 
 class LogRetriever(metaclass=MetaClass):
-    posgtresql_conn: psycopg2.extensions.connection
+    postgresql_conn: psycopg2.extensions.connection
     redis_conn: redis.client.Redis
     
     def get_logs(self, key: str):
@@ -207,7 +204,7 @@ class LogRetriever(metaclass=MetaClass):
         if logs:
             return {k.decode(): v.decode() for k, v in logs.items()}
         else:
-            with self.posgtresql_conn.cursor() as cur:
+            with self.postgresql_conn.cursor() as cur:
                 cur.execute(f"SELECT * FROM {Log.log_table_name} WHERE key = {key}")
                 logs = cur.fetchall()
             return logs or "Логи не найдены."
