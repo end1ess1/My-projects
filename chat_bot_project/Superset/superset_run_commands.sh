@@ -17,5 +17,8 @@ superset db upgrade
 # Инициализируем
 superset init
 
+# Дашборд
+superset import-assets --path /app/superset_dasboards
+
 # Запускем сервера Superset
 superset run -h 0.0.0.0 -p 8088

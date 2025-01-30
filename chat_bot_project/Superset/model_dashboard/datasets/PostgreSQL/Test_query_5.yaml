@@ -1,0 +1,57 @@
+table_name: Test_query_5
+main_dttm_col: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+catalog: telegram_bot_db
+schema: public
+sql: "-- \u0421\u0430\u043C\u044B\u0435 \u043F\u043E\u043F\u0443\u043B\u044F\u0440\
+  \u043D\u044B\u0435 \u0432\u043E\u043F\u0440\u043E\u0441\u044B\nSELECT \n    question,\n\
+  \    COUNT(*) AS frequency\nFROM llm_logs\nGROUP BY question\nORDER BY frequency\
+  \ DESC\nLIMIT 10;"
+params: null
+template_params: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+uuid: e3436623-b226-4cb6-9381-ca514e1ee258
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: count
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+columns:
+- column_name: frequency
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: LONGINTEGER
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: null
+- column_name: question
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: null
+version: 1.0.0
+database_uuid: f1b89417-aa51-4ff3-80df-d19b5729fbb7

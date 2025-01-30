@@ -1,0 +1,13 @@
+database_name: PostgreSQL
+sqlalchemy_uri: postgresql+psycopg2://super_user:XXXXXXXXXX@postgres:5432/telegram_bot_db
+cache_timeout: null
+expose_in_sqllab: true
+allow_run_async: false
+allow_ctas: false
+allow_cvas: false
+allow_dml: false
+allow_file_upload: false
+extra:
+  allows_virtual_table_explore: true
+uuid: f1b89417-aa51-4ff3-80df-d19b5729fbb7
+version: 1.0.0
