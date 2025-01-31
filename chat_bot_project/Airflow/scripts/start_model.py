@@ -1,50 +1,52 @@
 import subprocess
-from private_file import dict_params
+from lib import Log, ModelArgs
 from rich.traceback import install
+from connection import connect_to_databases
+
 install(show_locals=True)
 
-#Args.parse
+def start_server():
+    '''Функция для старта сервера с моделью'''
 
-# llama_server_path = args.
-# model_path = args.
-# host = args.
-# port = args.
-# ngl = args.
-# context_size = args.
+    # Логирование в Посгре и Редис
+    logging = Log(*connect_to_databases(), script_name='start_model.py')
 
-# Параметры запуска
-llama_server_path = "path/to/llama-server.exe"  # Укажи путь к llama-server.exe
-model_path = "../LLM/Gemma-2-9B-It-SPPO-Iter3-Q2_K.gguf"  # Путь к модели
-host = "192.168.0.156"  # Хост
-port = 5000  # Порт
-ngl = 100  # Количество слоев GPU для ускорения
-context_size = 2048  # Размер контекста
+    logging.log('Получение аргументов из командной строки')
 
-# Формируем команду
-command = [
-    llama_server_path,
-    "-m", model_path,
-    "-ngl", str(ngl),
-    "-c", str(context_size),
-    "--host", host,
-    "--port", str(port),
-]
+    args = ModelArgs.parse_base_args()
 
-try:
-    # Запуск процесса
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    llama_server_path = args.llama_server_path
+    model_path = args.model_path
+    host = args.host
+    port = args.port
+    ngl = args.ngl
+    context_size = args.context_size
 
-    print(f"Llama сервер запущен по адресу http://{host}:{port}")
-    print("Выход из программы с помощью CTRL+C")
+    logging.success('Аргументы успешно запарсились')
 
-    # Вывод логов
-    for line in process.stdout:
-        print(line, end="")
+    logging.log('Формируем команду для запуска')
 
-except FileNotFoundError:
-    print("Ошибка: Проверь путь к llama-server.exe.")
-except KeyboardInterrupt:
-    print("\nСервер остановлен пользователем.")
-    process.terminate()
-except Exception as e:
-    print(f"Произошла ошибка: {e}")
+    command = [
+        llama_server_path,
+        "-m", model_path,
+        "-ngl", ngl,
+        "-c", context_size,
+        "--host", host,
+        "--port", port,
+        "embeddings" # запуск в эмбеддинг режиме
+    ]
+
+    try:
+        logging.log('Пробуем запустить сервер')
+        
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+        logging.success(f"Llama сервер запущен по адресу http://{host}:{port}")
+
+    except FileNotFoundError:
+        logging.error("Ошибка: Проверь путь к llama-server.exe.")
+    except KeyboardInterrupt:
+        logging.error("\nСервер остановлен пользователем.")
+        process.terminate()
+    except Exception as e:
+        logging.error(f"Произошла ошибка: {e}")

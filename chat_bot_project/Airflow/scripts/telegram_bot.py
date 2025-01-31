@@ -4,47 +4,36 @@ from aiogram.types import Message
 from aiogram.filters import Command
 from datetime import datetime
 import asyncio
+import functools
 
 from private_file import API_TOKEN
 from chatting import get_model_answer
 from connection import connect_to_databases
 from lib import Log
 from rich.traceback import install
+from dotenv import load_dotenv
+import os
 
-install(show_locals=True)
 
-import functools
-import traceback
-
-# Обработка исключений
+# Обработка исключений и логирование в БДшки
 def handle_errors(func):
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
+        logging = kwargs.get('logging')
+
+        if logging is None:
+            raise ValueError("Logging instance is required but not provided")
+        
         try:
             return await func(*args, **kwargs)
         except Exception as e:
-            print(f"Error in {func.__name__}: {e}")
             logging.error(f"Error in {func.__name__}: {e}")
             traceback.print_exc()
     return wrapper
 
 
-MODEL_VERSION = 'model'
-LOG_TABLE_NAME = 'llm_logs'
-
-POSTGRES_CONN, REDIS_CONN = connect_to_databases()
-
-logging = Log(postgresql_conn=POSTGRES_CONN,
-              redis_conn=REDIS_CONN,
-              script_name='test_postgre_sql.py')
-
-logging.log('Инициализация Бота')
-
-BOT = Bot(token=API_TOKEN)
-DP = Dispatcher()
-
 @handle_errors
-async def log_message(message: Message, answer: str, question_date: datetime, answer_date: datetime):
+async def log_message(message: Message, answer: str, question_date: datetime, answer_date: datetime, logging):
         logging.insert_llm_log(
             user_id=message.from_user.id,
             first_name=message.from_user.first_name,
@@ -56,33 +45,55 @@ async def log_message(message: Message, answer: str, question_date: datetime, an
             question_date=question_date,
             answer_date=answer_date,
             language_code=message.from_user.language_code,
-            model_version=MODEL_VERSION,
-            log_table_name=LOG_TABLE_NAME
+            model_version=os.getenv("MODEL_VERSION"),
+            log_table_name=os.getenv("LOG_TABLE_NAME")
         )
 
         logging.success("Inserting logs success")
 
-@DP.message(Command("start"))
+
 @handle_errors
 async def send_welcome(message: Message):
     logging.log('Приветствие бота')
     await message.answer("Привет! Я бот-помощник Гисик. Могу помочь с любыми вопросами!")
 
 
-@DP.message()
 @handle_errors
-async def handle_message(message: Message):
+async def handle_message(message: Message, logging: Log):
 
     question_date = datetime.now()
     answer = get_model_answer(message.text)
     await message.answer(answer)
     answer_date = datetime.now()
 
-    await log_message(message, answer, question_date, answer_date)
+    await log_message(message, answer, question_date, answer_date, logging)
 
-@handle_errors
-async def main():
+
+async def main(DP, BOT, logging: Log):
+    @DP.message(Command("start"))
+    async def on_start(message: Message):
+        await send_welcome(message)
+
+    @DP.message()
+    async def on_message(message: Message):
+        await handle_message(message, logging)
+
     await DP.start_polling(BOT)
 
+
 if __name__ == '__main__':
-    asyncio.run(main())
+    
+    load_dotenv()
+    install(show_locals=True)
+
+    logging = Log(*connect_to_databases(), script_name='test_postgre_sql.py')
+    logging.success('Подключение к БД успешно!')
+
+    logging.log('Инициализация Бота')
+
+    BOT = Bot(token=API_TOKEN)
+    DP = Dispatcher()
+
+    logging.success('Инициализация Бота успешна')
+
+    asyncio.run(main(DP, BOT, logging))

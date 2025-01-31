@@ -14,7 +14,12 @@ class MetaClass(type):
 class ModelArgs(metaclass=MetaClass):
 
     __description__ = {
-        's': 'Something descrp'
+        'llama_server_path': 'Путь до сервера',
+        'model_path': 'Путь до модели',
+        'ngl': 'Number of GPU Layers - кол-во слоев',
+        'context_size': 'Контекстное окно, которое модель учитывает  при генерации ответа',
+        'host': 'Порт',
+        'port': 'Хост',
     }
 
     __mapping__ = {
@@ -25,7 +30,12 @@ class ModelArgs(metaclass=MetaClass):
         bool: bool
     }
 
-    s: str
+    llama_server_path: str
+    model_path: str
+    ngl: str
+    context_size: str
+    host: str
+    port: str
 
     @classmethod
     def parse_base_args(cls):
