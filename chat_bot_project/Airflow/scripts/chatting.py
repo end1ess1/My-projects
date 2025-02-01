@@ -1,14 +1,14 @@
+import os
 import requests
 import numpy as np
 import re
 import faiss
-
-
-url = 'http://192.168.0.156:5000/embeddings'
+from dotenv import load_dotenv
 
 
 def get_embeddings(prompt, url: str):
     '''Получение эмбеддинга'''
+
     response = requests.post(url, json={"content": prompt})
     embedding = response.json()[0]['embedding']
     embedding_array = np.array(embedding)
@@ -18,6 +18,7 @@ def get_embeddings(prompt, url: str):
 
 def split_document(document):
     '''Разделение документа на части по разметке #, ##, ###'''
+
     sections = re.split(r'(#+\s.*)', document)
     sections = [s.strip() for s in sections if s.strip()]
     result = []
@@ -34,6 +35,9 @@ def split_document(document):
     
     return result
 
+def split_into_batches(text, batch_size: int = 1000):
+    return [text[i:i + batch_size] for i in range(0, len(text), batch_size)]
+
 
 def create_faiss_index(embeddings):
     '''Создание индекса FAISS и добавление эмбеддингов'''
@@ -48,82 +52,36 @@ def create_faiss_index(embeddings):
 
 def search_faiss(query, index, documents, url):
     '''Поиск по запросу через FAISS и возвращение документа'''
+
     query_embedding = get_embeddings(query, url)
     _, I = index.search(query_embedding, k=1)
     return documents[I[0][0]]
 
 
 def main():
-    document = """
-    ### Кафедры МИИГАиК
-
-#### Геодезический факультет (ГФ)
-- Кафедра геодезии
-- Кафедра прикладной геодезии
-- Кафедра высшей геодезии
-- Кафедра астрономии и космической геодезии
-- Кафедра фотограмметрии
-- Кафедра аэрокосмических съемок
-
-#### Картографический факультет
-- Кафедра картографии
-- Кафедра визуализации геоданных и картографического дизайна
-- Кафедра географии
-- Кафедра космического мониторинга и экологии
-- Кафедра цифровой картографии
-
-#### Факультет оптического приборостроения
-- Кафедра оптико-электронных приборов
-- Кафедра прикладной оптики
-- Кафедра проектирования оптических приборов
-- Кафедра технологии оптического приборостроения
-- Лаборатория когерентной оптики
-
-#### Факультет геоинформатики и информационной безопасности
-- Кафедра информационно-измерительных систем
-- Кафедра прикладной информатики
-- Кафедра геоинформационных систем и технологий
-
-#### Факультет управления территориями
-- Кафедра земельного права и государственной регистрации недвижимости
-- Кафедра управления недвижимостью и развитием территорий
-- Кафедра землеустройства и кадастров
-- Кафедра экономики
-- Кафедра уголовного права и процесса
-- Кафедра гражданского права и процесса
-
-#### Факультет архитектуры и градостроительства
-- Кафедра архитектуры и ландшафта
-- Кафедра архитектурного проектирования
-- Кафедра градостроительства
-
-#### Заочный факультет
-- Учебная лаборатория электронного обучения и дистанционных образовательных технологий
-
-#### Общеуниверситетские кафедры
-- Кафедра высшей математики
-- Кафедра физики
-- Кафедра лингвистики
-- Кафедра физического воспитания
-- Кафедра истории, философии и социальных наук
-- Военный учебный центр
-
-    """
+    load_dotenv()
     
+    document = ''
+
+    for filename in os.listdir(os.getenv('TXT_DIR')):
+        file_path = os.path.join(os.getenv('TXT_DIR'), filename)
+        
+        with open(file_path, 'r', encoding='utf-8') as file:
+            document += file.read() + "\n"
+
     # Шаг 1: Разделение документа на части
-    sections = split_document(document)
-    
-    print(sections)
+    #sections = split_document(document)
+    sections = split_into_batches(document)
     
     # Шаг 2: Получение эмбеддингов для каждой части документа
-    embeddings = [get_embeddings(section, url) for section in sections]
+    embeddings = [get_embeddings(section, os.getenv('URL')) for section in sections]
     
     # Шаг 3: Создание индекса FAISS
     index = create_faiss_index(embeddings)
     
     # Шаг 4: Пример поиска по запросу
     query = "Какие есть кафедры в МИИГАИК?"
-    best_section = search_faiss(query, index, sections, url)
+    best_section = search_faiss(query, index, sections, os.getenv('URL'))
     
     print(f"Лучший ответ на запрос: \n{best_section}")
 
