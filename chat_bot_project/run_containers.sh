@@ -44,6 +44,9 @@ docker-compose -f Superset/docker-compose.yml up -d
 echo ACTIVE CONTAINERS LIST:
 docker ps
 
+# echo CONTAINERS RESOURCE STATISTIC:
+# docker stats
+
 echo RUNNING BOT:
 cd "C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Airflow\scripts"
 python telegram_bot.py
