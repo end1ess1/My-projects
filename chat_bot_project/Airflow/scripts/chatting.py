@@ -5,6 +5,17 @@ import re
 import faiss
 from dotenv import load_dotenv
 
+def normalize(vector):
+    return vector / np.linalg.norm(vector)
+
+def get_embeddings(prompt, url: str):
+    '''Получение эмбеддинга'''
+
+    response = requests.post(url, json={"content": prompt})
+    embedding = response.json()[0]['embedding']
+    embedding_array = np.array(embedding)
+    
+    return normalize(embedding_array)
 
 def get_embeddings(prompt, url: str):
     '''Получение эмбеддинга'''
