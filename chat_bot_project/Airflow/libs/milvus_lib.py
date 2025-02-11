@@ -1,6 +1,7 @@
-from lib import Log
+from log_lib import Log
 from typing import List, Optional
 from dataclasses import dataclass
+from model_lib import Model
 from pymilvus import (
     connections,
     FieldSchema,
@@ -80,7 +81,8 @@ class DocumentData:
 class MilvusDBClient:
     """Инициализация Милвус и операции с БД"""
     
-    def __init__(self, LibLog):
+    def __init__(self, model_url, LibLog):
+        self.model_url: str = model_url
         self.logging:  Log = LibLog
         self._connection_alias = "default"
         self.collection: Optional[Collection] = None
@@ -170,6 +172,34 @@ class MilvusDBClient:
         except Exception as e:
             self.logging.error(f'Ошибка вставки: {e}')
             raise
+
+
+    def search_answer(self, question: str, top_k=3):
+        embedding = Model(self.model_url).get_embedding(question)
+        
+        if not embedding or len(embedding) != 3584:
+            self.logging.warning(f'Некорректный эмбеддинг для вопроса: {question}')
+            return []
+
+        try:
+            results = self.collection.search(
+                data=[embedding],
+                anns_field='embedding',
+                param={"metric_type": "L2", "params": {"nprobe": 10}},
+                limit=top_k,
+                output_fields=['text', 'section', 'article']
+            )
+            
+            return [{
+                'text': hit.entity.get('text'),
+                'section': hit.entity.get('section'),
+                'article': hit.entity.get('article'),
+                'distance': hit.distance
+            } for hit in results[0]]
+        
+        except Exception as e:
+            self.logging.warning(f'Ошибка поиска: {str(e)}')
+            return []
 
     def close(self) -> None:
         """Закрыли коннекшн"""

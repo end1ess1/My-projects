@@ -7,10 +7,10 @@ from log_lib import Log
 from connection import connect_to_databases
 
 if __name__ == '__main__':
-    url = 'http://192.168.114.62:5001/embeddings'
-    logging = Log(*connect_to_databases(), script_name='loading_to_milvus.py')
+    model_url = 'http://192.168.114.62:5001/embeddings'
+    LibLog = Log(*connect_to_databases(), script_name='loading_to_milvus.py')
 
-    client = MilvusDBClient(url, logging)
+    client = MilvusDBClient(model_url=model_url, LibLog=LibLog)
     client.connect()
 
     try:
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         client.create_index()
 
         doc = DocumentData(
-            text='Sample text',
+            text='Sample teeext',
             embedding=[0.1]*CollectionConfig.DIMENSION,
             section='Introduction',
             subsection='Overview',
@@ -27,5 +27,15 @@ if __name__ == '__main__':
 
         # Insert data
         client.insert_document(doc)
+        question = "Перечень специальностей"
+        answers = client.search_answer(question)
+        
+        for i, answer in enumerate(answers, 1):
+            print(f"\nРезультат #{i}:")
+            print(f"Текст: {answer['text']}")
+            print(f"Раздел: {answer['section']}")
+            print(f"Статья: {answer['article']}")
+            print(f"Схожесть: {1 - answer['distance']:.2%}")
+
     finally:
         client.close()
