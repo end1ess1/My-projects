@@ -1,7 +1,5 @@
 import re
-import json
 from typing import List, Dict
-from pymilvus import connections, FieldSchema, CollectionSchema, DataType, Collection
 
 class EnhancedDocumentChunker:
     def __init__(self, max_chunk_size: int = 400, overlap: int = 50):
@@ -132,67 +130,3 @@ class EnhancedDocumentChunker:
                     final_chunks.append(chunk)
 
         return final_chunks
-
-class MilvusOptimizer:
-    def __init__(self):
-        self.collection = None
-
-    def connect(self, host='localhost', port='19530'):
-        connections.connect(host=host, port=port)
-        
-        fields = [
-            FieldSchema(name="id", dtype=DataType.INT64, is_primary=True, auto_id=True),
-            FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=65535),
-            FieldSchema(name="metadata", dtype=DataType.JSON),
-            FieldSchema(name="vector", dtype=DataType.FLOAT_VECTOR, dim=768)
-        ]
-        
-        schema = CollectionSchema(
-            fields=fields,
-            description="Optimized Document Chunks"
-        )
-        
-        self.collection = Collection(
-            name="optimized_rules",
-            schema=schema,
-            using='default'
-        )
-
-    def create_index(self):
-        index_params = {
-            "index_type": "IVF_FLAT",
-            "metric_type": "L2",
-            "params": {"nlist": 256}
-        }
-        
-        self.collection.create_index(
-            field_name="vector", 
-            index_params=index_params
-        )
-
-    def insert_data(self, chunks: List[Dict], vectors: List[List[float]]):
-        texts = [ch['text'] for ch in chunks]
-        metadata = [ch['metadata'] for ch in chunks]
-        
-        self.collection.insert([texts, metadata, vectors])
-        self.collection.flush()
-
-if __name__ == "__main__":
-    # Чанкование документа
-    chunker = EnhancedDocumentChunker()
-    chunks = chunker.chunk_document(r"C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Airflow\document_for_llm\main_prep.md")
-    
-    # Сохранение чанков
-    with open(r"C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Airflow\document_for_llm\new_chunks.json", "w", encoding="utf-8") as f:
-        json.dump(chunks, f, ensure_ascii=False, indent=2)
-    
-    # Подключение к Milvus
-    #milvus = MilvusOptimizer()
-    #milvus.connect()
-    
-    # Создание индекса
-    #milvus.create_index()
-    
-    # Пример вставки данных (требуется генерация векторов)
-    # vectors = generate_vectors(chunks) 
-    # milvus.insert_data(chunks, vectors)
