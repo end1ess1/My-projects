@@ -6,10 +6,15 @@ from datetime import datetime
 import asyncio
 import functools
 
+import sys
+LIBS_PATH = r'C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Airflow\libs'
+sys.path.append(LIBS_PATH)
+
 from private_file import API_TOKEN
 from chatting import get_model_answer
 from connection import connect_to_databases
-from lib import Log
+from log_lib import Log
+from milvus_lib import MilvusDBClient
 from rich.traceback import install
 from dotenv import load_dotenv
 import os
@@ -57,11 +62,33 @@ async def send_welcome(message: Message):
 async def handle_message(message: Message):
 
     question_date = datetime.now()
-    answer = get_model_answer(message.text)
-    await message.answer(answer)
+    answers = client.search_answer(message.text)
+    #await message.answer(answers[0]['text'])
+    await message.answer(f'''
+                         \nРезультат #1:
+                         \nТекст: {answers[0]['text']}
+                         \nРаздел: {answers[0]['section']}
+                         \nСтатья: {answers[0]['article']}
+                         \nСхожесть: {1 - answers[0]['distance']:.2%}
+                         
+                         \nРезультат #2:
+                         \nТекст: {answers[1]['text']}
+                         \nРаздел: {answers[1]['section']}
+                         \nСтатья: {answers[1]['article']}
+                         \nСхожесть: {1 - answers[1]['distance']:.2%}
+                         
+                         \nРезультат #3:
+                         \nТекст: {answers[2]['text']}
+                         \nРаздел: {answers[2]['section']}
+                         \nСтатья: {answers[2]['article']}
+                         \nСхожесть: {1 - answers[2]['distance']:.2%}
+                         ''')
+    
+    
+    #message.answer(answers[0]['text'])
     answer_date = datetime.now()
 
-    await log_message(message, answer, question_date, answer_date)
+    await log_message(message, answers[0]['text'], question_date, answer_date)
 
 
 async def main(DP, BOT):
@@ -80,10 +107,17 @@ if __name__ == '__main__':
     
     load_dotenv()
     install(show_locals=True)
+    
+    MODEL_URL = 'http://192.168.0.156:5001/embeddings'
 
     logging = Log(*connect_to_databases(), script_name='test_postgre_sql.py')
     logging.success('Подключение к БД успешно!')
-
+    
+    client = MilvusDBClient(model_url=MODEL_URL, LibLog=logging)
+    client.connect()
+    client.create_collection()
+    client.create_index()
+    
     logging.log('Инициализация Бота')
 
     BOT = Bot(token=API_TOKEN)

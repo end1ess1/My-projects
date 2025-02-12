@@ -180,7 +180,10 @@ class MilvusDBClient:
         if not embedding or len(embedding) != 3584:
             self.logging.warning(f'Некорректный эмбеддинг для вопроса: {question}')
             return []
-
+        
+        if not self.collection:
+            raise ValueError('Коллекция не инициализирована')
+        
         try:
             results = self.collection.search(
                 data=[embedding],

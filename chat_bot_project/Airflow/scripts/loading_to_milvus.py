@@ -3,39 +3,49 @@ LIBS_PATH = r'C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\ch
 sys.path.append(LIBS_PATH)
 
 from milvus_lib import MilvusDBClient, DocumentData, CollectionConfig
+from model_lib import Model
 from log_lib import Log
 from connection import connect_to_databases
+import json
+import os
 
 if __name__ == '__main__':
-    model_url = 'http://192.168.114.62:5001/embeddings'
+    MODEL_URL = 'http://192.168.0.156:5001/embedding'
     LibLog = Log(*connect_to_databases(), script_name='loading_to_milvus.py')
-
-    client = MilvusDBClient(model_url=model_url, LibLog=LibLog)
+    FOLDER = r'C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Airflow\preprocessing_documents'
+    
+    client = MilvusDBClient(model_url=MODEL_URL, LibLog=LibLog)
     client.connect()
-
+    
     try:
         client.create_collection()
         client.create_index()
 
-        doc = DocumentData(
-            text='Sample teeext',
-            embedding=[0.1]*CollectionConfig.DIMENSION,
-            section='Introduction',
-            subsection='Overview',
-            article='AI-101'
-        )
-
-        # Insert data
-        client.insert_document(doc)
-        question = "Перечень специальностей"
-        answers = client.search_answer(question)
+        # for file in os.listdir(FOLDER):
+        #     if file.endswith(".json"):
+        #         with open(os.path.join(FOLDER, file), "r", encoding="utf-8") as ff:
+        #             data = json.load(ff)
+        #     break
+                
+        # for info in data:
+        #     doc = DocumentData(
+        #         text=info['text'],
+        #         embedding=Model(MODEL_URL).get_embedding(info['text']),
+        #         section=info['metadata']['section'] if info['metadata']['section'] is not None else 'None',
+        #         subsection=info['metadata']['subsection']  if info['metadata']['subsection'] is not None else 'None',
+        #         article=info['metadata']['article']  if info['metadata']['article'] is not None else 'None'
+        #     )
+        #     client.insert_document(doc)
         
-        for i, answer in enumerate(answers, 1):
-            print(f"\nРезультат #{i}:")
-            print(f"Текст: {answer['text']}")
-            print(f"Раздел: {answer['section']}")
-            print(f"Статья: {answer['article']}")
-            print(f"Схожесть: {1 - answer['distance']:.2%}")
+        doc = DocumentData(
+                text='Новое',
+                embedding=Model(MODEL_URL).get_embedding('text'),
+                section='Новое',
+                subsection='Новое',
+                article='Новое'
+            )
+        
+        client.insert_document(doc)
 
     finally:
         client.close()
