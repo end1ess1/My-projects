@@ -1,6 +1,7 @@
 from dataclasses import dataclass, fields
 import argparse
 import requests
+import numpy as np
 
 class MetaClass(type):
     def __new__(cls, name, bases, dct):
@@ -47,4 +48,6 @@ class Model(metaclass=MetaClass):
     
     def get_embedding(self, text: str) -> list:
         response = requests.post(self.url, json={'content': text})
-        return response.json()[0].get('embedding')[0]
+        embedding = response.json()[0].get('embedding')[0]
+        norm_embedding = embedding / np.linalg.norm(embedding)
+        return norm_embedding
