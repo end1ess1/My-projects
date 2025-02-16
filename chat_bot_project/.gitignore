@@ -6,13 +6,13 @@
 
 # Private Files
 Airflow/scripts/commands.sh
-Airflow/scripts/private_file.py
 Airflow/scripts/project.py
 Airflow/scripts/.env
 Airflow/scripts/__pycache__/
 
 # Airflow
 Airflow/.env
+Airflow/libs/.env
 Airflow/logs
 
 # Superset

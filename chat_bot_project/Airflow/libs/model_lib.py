@@ -2,6 +2,11 @@ from dataclasses import dataclass, fields
 import argparse
 import requests
 import numpy as np
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class MetaClass(type):
     def __new__(cls, name, bases, dct):
@@ -10,7 +15,6 @@ class MetaClass(type):
 
 
 class ModelArgs(metaclass=MetaClass):
-
     __description__ = {
         'llama_server_path': 'Путь до сервера',
         'model_path': 'Путь до модели',
@@ -44,10 +48,33 @@ class ModelArgs(metaclass=MetaClass):
 
 
 class Model(metaclass=MetaClass):
-    url: str
+    local_url: str = os.getenv('LOCAL_URL')
+    api_key: str = os.getenv('API_KEY')
+    base_url: str = os.getenv('BASE_URL')
+    model_type: str = 'API'
     
-    def get_embedding(self, text: str) -> list:
-        response = requests.post(self.url, json={'content': text})
-        embedding = response.json()[0].get('embedding')[0]
+    def _normalize_embedding(self, embedding):
         norm_embedding = embedding / np.linalg.norm(embedding)
         return norm_embedding
+    
+    def get_embedding(self, text: str) -> list:
+        if self.model_type != 'API':
+            response = requests.post(self.local_url, json={'content': text})
+            embedding = response.json()[0].get('embedding')[0]
+            norm_embedding = self._normalize_embedding(embedding)
+
+            return norm_embedding
+
+        else:
+            client = OpenAI(api_key=self.api_key,
+                            base_url=self.base_url)
+            
+            embedding = client.embeddings.create(
+                        model="text-embedding-3-large",
+                        input=text,
+                        encoding_format="float"
+                        )
+            
+            norm_embedding = self._normalize_embedding(embedding)
+            
+            return embedding

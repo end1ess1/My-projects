@@ -1,5 +1,5 @@
 import subprocess
-from lib import Log, ModelArgs
+from libs import Log, ModelArgs
 from rich.traceback import install
 from connection import connect_to_databases
 

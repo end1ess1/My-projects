@@ -16,7 +16,7 @@ class CollectionConfig:
     """Конфиг для БД"""
 
     NAME = 'doc_embeddings'
-    DIMENSION = 3584
+    DIMENSION = 3072
     DESCRIPTION = 'Эмбеддинги документа'
     CONSISTENCY_LEVEL = 'Strong'
     AUTO_ID = True
@@ -80,7 +80,7 @@ class DocumentData:
 
 class MilvusDBClient:
     """Инициализация Милвус и операции с БД"""
-    
+
     def __init__(self, model_url, LibLog):
         self.model_url: str = model_url
         self.logging:  Log = LibLog
@@ -106,7 +106,7 @@ class MilvusDBClient:
     def create_collection(self) -> None:
         """Создание коллекции"""
         self._validate_connection()
-        
+
         if utility.has_collection(CollectionConfig.NAME):
             self.collection = Collection(CollectionConfig.NAME)
             self.logging.log(f'Коллекция уже существует: {CollectionConfig.NAME}')
@@ -127,14 +127,14 @@ class MilvusDBClient:
     def create_index(self) -> None:
         """Cоздание индекса"""
         self._validate_connection()
-        
+
         if not self.collection:
             raise ValueError('Коллекция не инициализирована')
 
         if self.collection.has_index():
             self.logging.log('Индекс уже существует')
         else:
-            
+
             index_params = {
                 'index_type': IndexConfig.INDEX_TYPE,
                 'metric_type': IndexConfig.METRIC_TYPE,
@@ -174,10 +174,10 @@ class MilvusDBClient:
             raise
 
 
-    def search_answer(self, question: str, top_k=3):
-        embedding = Model(self.model_url).get_embedding(question)
+    def search_answer(self, question: str, model_type: str = 'API', top_k = 3):
+        embedding = Model(model_type=model_type).get_embedding(question)
         
-        if not embedding or len(embedding) != 3584:
+        if not embedding or len(embedding) != CollectionConfig.DIMENSION:
             self.logging.warning(f'Некорректный эмбеддинг для вопроса: {question}')
             return []
         

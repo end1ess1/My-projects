@@ -1,23 +1,26 @@
-import traceback
-from aiogram import Bot, Dispatcher
-from aiogram.types import Message
-from aiogram.filters import Command
-from datetime import datetime
 import asyncio
+import click
 import functools
-
+import os
 import sys
-LIBS_PATH = r'C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Airflow\libs'
-sys.path.append(LIBS_PATH)
+import traceback
+from datetime import datetime
+from dotenv import load_dotenv
 
-from private_file import API_TOKEN
-from chatting import get_model_answer
+from aiogram import Bot, Dispatcher
+from aiogram.filters import Command
+from aiogram.types import Message
+from rich.traceback import install
+
 from connection import connect_to_databases
+
+load_dotenv()
+install(show_locals=True)
+sys.path.append(os.getenv('LIBS_PATH'))
+from chatting import get_model_answer
 from log_lib import Log
 from milvus_lib import MilvusDBClient
-from rich.traceback import install
-from dotenv import load_dotenv
-import os
+from private_file import API_TOKEN
 
 
 # Обработка исключений и логирование в БДшки
@@ -32,23 +35,26 @@ def handle_errors(func):
     return wrapper
 
 
+@click.command()
+@click.option("--model_version", default=os.getenv("MODEL_VERSION"), help="Имя пользователя")
 @handle_errors
-async def log_message(message: Message, answer: str, question_date: datetime, answer_date: datetime):
-        logging.insert_llm_log(
-            user_id=message.from_user.id,
-            first_name=message.from_user.first_name,
-            last_name=message.from_user.last_name,
-            username=message.from_user.username,
-            chat_id=message.chat.id,
-            question=message.text,
-            answer=answer,
-            question_date=question_date,
-            answer_date=answer_date,
-            language_code=message.from_user.language_code,
-            model_version=os.getenv("MODEL_VERSION"),
-            log_table_name=os.getenv("LOG_TABLE_NAME")
-        )
-
+async def log_message(message: Message, answer: str, question_date: datetime, answer_date: datetime, model_version: str):
+        __dicting__ = {
+            'user_id': message.from_user.id,
+            'first_name': message.from_user.first_name,
+            'last_name': message.from_user.last_name,
+            'username': message.from_user.username,
+            'chat_id': message.chat.id,
+            'question': message.text,
+            'answer': answer,
+            'question_date': question_date,
+            'answer_date': answer_date,
+            'language_code': message.from_user.language_code,
+            'model_version': model_version,
+            'log_table_name': os.getenv("LOG_TABLE_NAME")
+        }
+        
+        logging.chat_history(__dicting__)
         logging.success("Inserting logs success")
 
 
@@ -70,21 +76,20 @@ async def handle_message(message: Message):
                          \nРаздел: {answers[0]['section']}
                          \nСтатья: {answers[0]['article']}
                          \nСхожесть: {1 - answers[0]['distance']:.2%}
-                         
+
                          \nРезультат #2:
                          \nТекст: {answers[1]['text']}
                          \nРаздел: {answers[1]['section']}
                          \nСтатья: {answers[1]['article']}
                          \nСхожесть: {1 - answers[1]['distance']:.2%}
-                         
+
                          \nРезультат #3:
                          \nТекст: {answers[2]['text']}
                          \nРаздел: {answers[2]['section']}
                          \nСтатья: {answers[2]['article']}
                          \nСхожесть: {1 - answers[2]['distance']:.2%}
                          ''')
-    
-    
+
     #message.answer(answers[0]['text'])
     answer_date = datetime.now()
 
@@ -104,11 +109,6 @@ async def main(DP, BOT):
 
 
 if __name__ == '__main__':
-    
-    load_dotenv()
-    install(show_locals=True)
-    
-    MODEL_URL = 'http://192.168.0.156:5001/embeddings'
 
     logging = Log(*connect_to_databases(), script_name='test_postgre_sql.py')
     logging.success('Подключение к БД успешно!')

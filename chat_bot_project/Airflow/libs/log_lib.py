@@ -10,109 +10,94 @@ class MetaClass(type):
         return dataclass(old)
 
 
-class Log(metaclass=MetaClass):
-    postgresql_conn: psycopg2.extensions.connection
-    redis_conn: redis.client.Redis
-    script_name : str
-    log_table_name: str='scripts_logs'
-    
-    def __post_init__(self) -> None:
-        self._setup_table()
+class ChatHistoryEntry(metaclass=MetaClass):
+        user_id: str
+        first_name: str
+        last_name: str
+        username: str
+        chat_id: str
+        question: str
+        answer: str
+        question_date: datetime
+        answer_date: datetime
+        language_code: str
+        model_version: str
+        log_table_name: str
 
-    def _setup_table(self) -> None:
 
-        __comments__  = {
+class RedisConfig:
+    @staticmethod
+    def chat_history_entry(user_id, first_name, last_name, username, chat_id, 
+                           question, answer, question_date, answer_date, language_code):
+        return {
+            'user_id': str(user_id),
+            'first_name': str(first_name),
+            'last_name': str(last_name),
+            'username': str(username),
+            'chat_id': str(chat_id),
+            'question': str(question),
+            'answer': str(answer),
+            'question_length': str(len(question)),
+            'answer_length': str(len(answer)),
+            'response_time_s': str((answer_date - question_date).total_seconds()),
+            'language_code': str(language_code),
+            'question_date': str(question_date),
+            'answer_date': str(answer_date)
+        }        
+
+
+    @staticmethod
+    def logs_entry(level, comment):
+        return {
+            'processed_dttm': str(datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')),
+            'level': level,
+            'comment': comment
+        }
+
+
+class PostgreConfig:
+    @staticmethod
+    def logs_table_init(log_table_name):
+        COMMENTS  = {
             'id': 'Уникальный идентификатор записи',
             'script_name': 'Имя, обязательно для заполнения',
             'processed_dttm': 'Дата и время, обязательно для заполнения',
             'level': 'Уровень логирования (например: log, error, warning)',
             'comment': 'Комментарий (может быть NULL)'
         }
-
-        with self.postgresql_conn.cursor() as cur:
-            cur.execute(f"""
-                        CREATE TABLE IF NOT EXISTS {self.log_table_name} (
+        
+        SQL_SAMPLE = f"""CREATE TABLE IF NOT EXISTS {log_table_name} (
                             id SERIAL PRIMARY KEY,
                             script_name VARCHAR(50) NOT NULL,
                             processed_dttm VARCHAR(50) NOT NULL,
                             level VARCHAR(10) NOT NULL,
-                            comment TEXT
-                        );
-                        """)
-            
-            for col in __comments__:
-                cur.execute(f"COMMENT ON COLUMN {self.log_table_name}.{col} IS '{__comments__[col]}'")
-            
-            cur.execute(f"COMMENT ON TABLE {self.log_table_name} IS 'Таблица для логирования скриптов'")
-            
-            self.postgresql_conn.commit()
+                            comment TEXT);
+                    """
+        return COMMENTS, SQL_SAMPLE
 
 
-    def _redis_caching_expire(self, comment: str, level: str):
-        __logs_entry__ = {
-            'processed_dttm': str(datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')),
-            'level': level,
-            'comment': comment
-        }
-
-        self.redis_conn.hset(name=self.script_name, mapping=__logs_entry__)
-        self.redis_conn.expire(name=self.script_name, time=86400)
-    
-    
-    def insert(self, comment: str, level: str) -> None:
-        with self.postgresql_conn.cursor() as cur:
-            cur.execute(f"""
-                        INSERT INTO {self.log_table_name} (
+    @staticmethod
+    def logs_insert_sql(log_table_name, script_name, level, comment):
+        SQL_SAMPLE = f"""
+                        INSERT INTO {log_table_name} (
                             script_name,
                             processed_dttm,
                             level,
                             comment
                             )
                         VALUES (
-                            '{self.script_name}',
+                            '{script_name}',
                             '{str(datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S'))}',
                             '{level}',
                             '{comment}'
                         );"""
-                        )
-        
-            self.postgresql_conn.commit()
-        
-        self._redis_caching_expire(comment=comment, level=level)
-    
-    
-    def error(self, comment: str, level: str='error')  -> None:
-        
-        self.insert(comment, level)
-        
-    
-    def warning(self, comment: str, level: str='warning')  -> None:
-        
-        self.insert(comment, level)
-        
-    
-    def log(self, comment: str, level: str='log')  -> None:
-        
-        self.insert(comment, level)
-        
-    
-    def success(self, comment: str, level: str='success')  -> None:
-        
-        self.insert(comment, level)
-        
-    def finish(self, comment: str='Завершение работы', level: str='finish')  -> None:
-        
-        self.insert(comment, level)
-        self.postgresql_conn.close()
-        self.redis_conn.close()
-    
-    ###
+        return SQL_SAMPLE
 
-    def insert_llm_log(self, user_id: str, first_name: str, last_name: str, username: str, chat_id: str,
-                       question: str, answer: str, question_date: datetime, answer_date: datetime,
-                       language_code: str, model_version: str, log_table_name: str) -> str:
-        with self.postgresql_conn.cursor() as cur:
-            cur.execute(f"""
+
+    @staticmethod
+    def chat_history_insert_sql(log_table_name, model_version, user_id, first_name, last_name, 
+                                username, chat_id, question, answer, question_date, answer_date, language_code):
+        SQL_SAMPLE = f"""
                 INSERT INTO {log_table_name} (
                     user_id,
                     first_name,
@@ -145,28 +130,91 @@ class Log(metaclass=MetaClass):
                     '{answer_date}',
                     '{str(model_version)}'
                 );
-            """)
+            """
+        return SQL_SAMPLE
+
+
+class Log(metaclass=MetaClass):
+    postgresql_conn: psycopg2.extensions.connection
+    redis_conn: redis.client.Redis
+    script_name : str
+    log_table_name: str='scripts_logs'
+    
+
+    def __post_init__(self) -> None:
+        self._setup_table()
+        
+
+    def _setup_table(self) -> None:
+        with self.postgresql_conn.cursor() as cur:
+            
+            comments, sql_init_table = PostgreConfig.logs_table_init(self.log_table_name)
+
+            cur.execute(sql_init_table)
+            
+            for col in comments:
+                cur.execute(f"COMMENT ON COLUMN {self.log_table_name}.{col} IS '{comments[col]}'")
+            
+            cur.execute(f"COMMENT ON TABLE {self.log_table_name} IS 'Таблица для логирования скриптов'")
             
             self.postgresql_conn.commit()
 
-        __logs_entry__ = {
-            'user_id': str(user_id),
-            'first_name': str(first_name),
-            'last_name': str(last_name),
-            'username': str(username),
-            'chat_id': str(chat_id),
-            'question': str(question),
-            'answer': str(answer),
-            'question_length': str(len(question)),
-            'answer_length': str(len(answer)),
-            'response_time_s': str((answer_date-question_date).total_seconds()),
-            'language_code': str(language_code),
-            'question_date': str(question_date),
-            'answer_date': str(answer_date)
-        }
 
-        self.redis_conn.hset(name=model_version, mapping=__logs_entry__)
-        self.redis_conn.expire(name=model_version, time=86400)
+    def _get_config(self, comment, level):
+        sql_insert_logs = PostgreConfig.logs_insert_sql(self.log_table_name, self.script_name, level, comment)
+        redis_mapping = RedisConfig.logs_entry(comment, level)
+        
+        return sql_insert_logs, redis_mapping
+
+
+    def _redis_caching_expire(self, mapping):
+        self.redis_conn.hset(name=self.script_name, mapping=mapping)
+        self.redis_conn.expire(name=self.script_name, time=86400)
+
+
+    def insert(self, sql_sample: str, redis_mapping: dict) -> None:
+        with self.postgresql_conn.cursor() as cur:            
+            cur.execute(sql_sample)
+
+            self.postgresql_conn.commit()
+
+        self._redis_caching_expire(redis_mapping)
+
+
+    def error(self, comment: str, level: str='error')  -> None:
+        self.insert(*self._get_config(comment, level))
+
+
+    def warning(self, comment: str, level: str='warning')  -> None:
+        self.insert(*self._get_config(comment, level))
+
+
+    def log(self, comment: str, level: str='log')  -> None:
+        self.insert(*self._get_config(comment, level))
+
+
+    def success(self, comment: str, level: str='success')  -> None:
+        self.insert(*self._get_config(comment, level))
+
+
+    def finish(self, comment: str='Завершение работы', level: str='finish')  -> None:
+        self.insert(*self._get_config(comment, level))
+        self.postgresql_conn.close()
+        self.redis_conn.close()
+
+
+class ChatHistory(Log):
+    def _get_config(self, log_table_name, model_version, user_id, first_name, last_name, 
+                                username, chat_id, question, answer, question_date, answer_date, language_code):
+        sql_insert_logs = PostgreConfig.chat_history_insert_sql(log_table_name, model_version, user_id, first_name, last_name, 
+                                username, chat_id, question, answer, question_date, answer_date, language_code)
+        redis_mapping = RedisConfig.chat_history_entry(user_id, first_name, last_name, username, chat_id, 
+                           question, answer, question_date, answer_date, language_code)
+        
+        return sql_insert_logs, redis_mapping
+    
+    def load_logs(self, dict_config):
+        self.insert(*self._get_config(**dict_config))
 
 
 class LogRetriever(metaclass=MetaClass):

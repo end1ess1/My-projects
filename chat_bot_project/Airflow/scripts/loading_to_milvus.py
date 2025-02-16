@@ -10,11 +10,10 @@ import json
 import os
 
 if __name__ == '__main__':
-    MODEL_URL = 'http://192.168.0.156:5001/embedding'
     LibLog = Log(*connect_to_databases(), script_name='loading_to_milvus.py')
     FOLDER = r'C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Airflow\preprocessing_documents'
     
-    client = MilvusDBClient(model_url=MODEL_URL, LibLog=LibLog)
+    client = MilvusDBClient(LibLog=LibLog)
     client.connect()
     
     try:
@@ -39,7 +38,7 @@ if __name__ == '__main__':
         
         doc = DocumentData(
                 text='Новое',
-                embedding=Model(MODEL_URL).get_embedding('text'),
+                embedding=Model().get_embedding('text'),
                 section='Новое',
                 subsection='Новое',
                 article='Новое'
