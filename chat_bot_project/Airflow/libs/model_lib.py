@@ -48,17 +48,14 @@ class ModelArgs(metaclass=MetaClass):
 
 
 class Model(metaclass=MetaClass):
-    local_url: str = os.getenv('LOCAL_URL')
-    api_key: str = os.getenv('API_KEY')
-    base_url: str = os.getenv('BASE_URL')
-    model_type: str = 'API'
-    
+    model_type: str = 'notLocal'
+
     def _normalize_embedding(self, embedding):
         norm_embedding = embedding / np.linalg.norm(embedding)
         return norm_embedding
-    
+
     def get_embedding(self, text: str) -> list:
-        if self.model_type != 'API':
+        if self.model_type == 'local':
             response = requests.post(self.local_url, json={'content': text})
             embedding = response.json()[0].get('embedding')[0]
             norm_embedding = self._normalize_embedding(embedding)
@@ -66,15 +63,40 @@ class Model(metaclass=MetaClass):
             return norm_embedding
 
         else:
-            client = OpenAI(api_key=self.api_key,
-                            base_url=self.base_url)
-            
+            client = OpenAI(api_key=os.getenv('API_KEY'),
+                            base_url=os.getenv('BASE_URL'))
             embedding = client.embeddings.create(
                         model="text-embedding-3-large",
                         input=text,
                         encoding_format="float"
                         )
-            
+            embedding = embedding.data[0].embedding
             norm_embedding = self._normalize_embedding(embedding)
-            
+
             return embedding
+
+    def get_answer(self, question, document):
+        if self.model_type == 'local':
+            base_url=os.getenv('LOCAL_URL')
+            api_key=os.getenv('LOCAL_API_KEY')
+        else:
+            base_url=os.getenv('BASE_URL')
+            api_key=os.getenv('API_KEY')
+        
+        print(base_url)
+        print(api_key)
+        
+        
+        client = OpenAI(base_url=base_url, api_key=api_key)
+
+        completion = client.chat.completions.create(
+            model=os.getenv('MODEL'),
+            messages=[
+                {"role": "system", "content": os.getenv('PROMPT')},
+                {"role": "user", "content": os.getenv('MESSAGE').format(document=document, question=question)}
+            ]
+            )
+
+        answer = completion.choices[0].message.content
+        
+        return answer

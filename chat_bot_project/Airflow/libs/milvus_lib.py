@@ -15,14 +15,14 @@ from pymilvus import (
 class CollectionConfig:
     """Конфиг для БД"""
 
-    NAME = 'doc_embeddings'
-    DIMENSION = 3072
-    DESCRIPTION = 'Эмбеддинги документа'
-    CONSISTENCY_LEVEL = 'Strong'
-    AUTO_ID = True
+    NAME: str = 'Документы'
+    DIMENSION: int = 3072
+    DESCRIPTION: str = 'Эмбеддинги'
+    CONSISTENCY_LEVEL: str = 'Strong'
+    AUTO_ID: bool = True
 
     @classmethod
-    def get_fields(cls) -> List[FieldSchema]:
+    def get_fields(cls, dimension: int) -> List[FieldSchema]:
         """Поля для коллекции"""
 
         return [
@@ -35,7 +35,7 @@ class CollectionConfig:
             FieldSchema(
                 name='embedding',
                 dtype=DataType.FLOAT_VECTOR,
-                dim=cls.DIMENSION
+                dim=dimension
             ),
             FieldSchema(
                 name='text',
@@ -81,8 +81,7 @@ class DocumentData:
 class MilvusDBClient:
     """Инициализация Милвус и операции с БД"""
 
-    def __init__(self, model_url, LibLog):
-        self.model_url: str = model_url
+    def __init__(self, LibLog: Log):
         self.logging:  Log = LibLog
         self._connection_alias = "default"
         self.collection: Optional[Collection] = None
@@ -103,26 +102,28 @@ class MilvusDBClient:
         if not self._is_connected:
             raise ConnectionError('Нет коннекшена к Милвусу')
 
-    def create_collection(self) -> None:
+    def create_collection(self, name: str, dimension: int) -> None:
         """Создание коллекции"""
         self._validate_connection()
 
-        if utility.has_collection(CollectionConfig.NAME):
-            self.collection = Collection(CollectionConfig.NAME)
-            self.logging.log(f'Коллекция уже существует: {CollectionConfig.NAME}')
+        self.dimension = dimension
+
+        if utility.has_collection(name):
+            self.collection = Collection(name)
+            self.logging.log(f'Коллекция уже существует: {name}')
         
         else:
             schema = CollectionSchema(
-                fields=CollectionConfig.get_fields(),
+                fields=CollectionConfig.get_fields(self.dimension),
                 description=CollectionConfig.DESCRIPTION
             )
 
             self.collection = Collection(
-                name=CollectionConfig.NAME,
+                name=name,
                 schema=schema,
                 consistency_level=CollectionConfig.CONSISTENCY_LEVEL
             )
-            self.logging.log(f'Коллекция {CollectionConfig.NAME} успешно создана!')
+            self.logging.log(f'Коллекция {name} успешно создана!')
 
     def create_index(self) -> None:
         """Cоздание индекса"""
@@ -174,10 +175,10 @@ class MilvusDBClient:
             raise
 
 
-    def search_answer(self, question: str, model_type: str = 'API', top_k = 3):
+    def search_answer(self, question: str, model_type: str = 'notLocal', top_k = 3):
         embedding = Model(model_type=model_type).get_embedding(question)
         
-        if not embedding or len(embedding) != CollectionConfig.DIMENSION:
+        if not embedding or len(embedding) != self.dimension:
             self.logging.warning(f'Некорректный эмбеддинг для вопроса: {question}')
             return []
         

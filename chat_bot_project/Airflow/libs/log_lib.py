@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import psycopg2.extensions
 from datetime import datetime
 import redis.client
+from typing import Dict, Union
 
 
 class MetaClass(type):
@@ -10,7 +11,7 @@ class MetaClass(type):
         return dataclass(old)
 
 
-class ChatHistoryEntry(metaclass=MetaClass):
+class ChatHistoryConfig(metaclass=MetaClass):
         user_id: str
         first_name: str
         last_name: str
@@ -27,27 +28,28 @@ class ChatHistoryEntry(metaclass=MetaClass):
 
 class RedisConfig:
     @staticmethod
-    def chat_history_entry(user_id, first_name, last_name, username, chat_id, 
-                           question, answer, question_date, answer_date, language_code):
+    def chat_history_entry(dict_config: Dict[str, Union[str, datetime]]):
+        c = ChatHistoryConfig(**dict_config)
+        
         return {
-            'user_id': str(user_id),
-            'first_name': str(first_name),
-            'last_name': str(last_name),
-            'username': str(username),
-            'chat_id': str(chat_id),
-            'question': str(question),
-            'answer': str(answer),
-            'question_length': str(len(question)),
-            'answer_length': str(len(answer)),
-            'response_time_s': str((answer_date - question_date).total_seconds()),
-            'language_code': str(language_code),
-            'question_date': str(question_date),
-            'answer_date': str(answer_date)
+            'user_id': str(c.user_id),
+            'first_name': str(c.first_name),
+            'last_name': str(c.last_name),
+            'username': str(c.username),
+            'chat_id': str(c.chat_id),
+            'question': str(c.question),
+            'answer': str(c.answer),
+            'question_length': str(len(c.question)),
+            'answer_length': str(len(c.answer)),
+            'response_time_s': str((c.answer_date - c.question_date).total_seconds()),
+            'language_code': str(c.language_code),
+            'question_date': str(c.question_date),
+            'answer_date': str(c.answer_date)
         }        
 
 
     @staticmethod
-    def logs_entry(level, comment):
+    def logs_entry(level: str, comment: str):
         return {
             'processed_dttm': str(datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')),
             'level': level,
@@ -57,7 +59,7 @@ class RedisConfig:
 
 class PostgreConfig:
     @staticmethod
-    def logs_table_init(log_table_name):
+    def logs_table_init(log_table_name: str):
         COMMENTS  = {
             'id': 'Уникальный идентификатор записи',
             'script_name': 'Имя, обязательно для заполнения',
@@ -77,7 +79,7 @@ class PostgreConfig:
 
 
     @staticmethod
-    def logs_insert_sql(log_table_name, script_name, level, comment):
+    def logs_insert_sql(log_table_name: str, script_name: str, level: str, comment: str):
         SQL_SAMPLE = f"""
                         INSERT INTO {log_table_name} (
                             script_name,
@@ -93,12 +95,13 @@ class PostgreConfig:
                         );"""
         return SQL_SAMPLE
 
-
+      
     @staticmethod
-    def chat_history_insert_sql(log_table_name, model_version, user_id, first_name, last_name, 
-                                username, chat_id, question, answer, question_date, answer_date, language_code):
+    def chat_history_insert_sql(dict_config: Dict[str, Union[str, datetime]]):
+        c = ChatHistoryConfig(**dict_config)
+        
         SQL_SAMPLE = f"""
-                INSERT INTO {log_table_name} (
+                INSERT INTO {c.log_table_name} (
                     user_id,
                     first_name,
                     last_name,
@@ -115,20 +118,20 @@ class PostgreConfig:
                     model_version
                 )
                 VALUES (
-                    '{user_id}',
-                    '{str(first_name)}',
-                    '{str(last_name)}',
-                    '{str(username)}',
-                    '{chat_id}',
-                    '{str(question)}',
-                    '{str(answer)}',
-                    '{str(len(question))}',
-                    '{str(len(answer))}',
-                    '{(answer_date-question_date).total_seconds()}',
-                    '{str(language_code)}',
-                    '{question_date}',
-                    '{answer_date}',
-                    '{str(model_version)}'
+                    '{c.user_id}',
+                    '{str(c.first_name)}',
+                    '{str(c.last_name)}',
+                    '{str(c.username)}',
+                    '{c.chat_id}',
+                    '{str(c.question)}',
+                    '{str(c.answer)}',
+                    '{str(len(c.question))}',
+                    '{str(len(c.answer))}',
+                    '{(c.answer_date-c.question_date).total_seconds()}',
+                    '{str(c.language_code)}',
+                    '{c.question_date}',
+                    '{c.answer_date}',
+                    '{str(c.model_version)}'
                 );
             """
         return SQL_SAMPLE
@@ -204,17 +207,14 @@ class Log(metaclass=MetaClass):
 
 
 class ChatHistory(Log):
-    def _get_config(self, log_table_name, model_version, user_id, first_name, last_name, 
-                                username, chat_id, question, answer, question_date, answer_date, language_code):
-        sql_insert_logs = PostgreConfig.chat_history_insert_sql(log_table_name, model_version, user_id, first_name, last_name, 
-                                username, chat_id, question, answer, question_date, answer_date, language_code)
-        redis_mapping = RedisConfig.chat_history_entry(user_id, first_name, last_name, username, chat_id, 
-                           question, answer, question_date, answer_date, language_code)
-        
+    def _get_config(self, dict_config):
+        sql_insert_logs = PostgreConfig.chat_history_insert_sql(dict_config)
+        redis_mapping = RedisConfig.chat_history_entry(dict_config)
+
         return sql_insert_logs, redis_mapping
     
     def load_logs(self, dict_config):
-        self.insert(*self._get_config(**dict_config))
+        self.insert(*self._get_config(dict_config))
 
 
 class LogRetriever(metaclass=MetaClass):
