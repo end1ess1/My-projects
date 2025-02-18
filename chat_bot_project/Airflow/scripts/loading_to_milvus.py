@@ -40,16 +40,5 @@ if __name__ == '__main__':
                 article=info['metadata']['article']  if info['metadata']['article'] is not None else 'None'
             )
             client.insert_document(doc)
-        
-        # doc = DocumentData(
-        #         text='Новое',
-        #         embedding=Model().get_embedding('text1'),
-        #         section='Новое',
-        #         subsection='Новое',
-        #         article='Новое'
-        #     )
-
-        # client.insert_document(doc)
-
     finally:
         client.close()

@@ -1,40 +1,56 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.dummy import DummyOperator
+from airflow.operators.bash import BashOperator
+from airflow.utils.task_group import TaskGroup
+from airflow.providers.docker.operators.docker import DockerOperator
 import yaml
 import sys
 import os
 
-#AG_ID = '1642_77_'
 DAG_NAME = 'chat_bot_dag'
 SCRIPTS_PATH = os.getenv("AIRFLOW_VAR_SCRIPTS", '/opt/airflow/scripts')
 CONFIG_PATH = os.getenv("AIRFLOW_VAR_CONFIG", '/opt/airflow/config')
+DATABASES_PATH = os.getenv("AIRFLOW_VAR_DATABASES", '/opt/airflow/databases')
 
 sys.path.append(SCRIPTS_PATH)
 sys.path.append(CONFIG_PATH)
-
-from testik import create_file
+sys.path.append(DATABASES_PATH)
 
 with open(os.path.join(CONFIG_PATH, f'{DAG_NAME}_params.yaml'), 'r') as ff:
     dag_config = yaml.full_load(ff)
 
-# Определение DAG
 with DAG(DAG_NAME, **dag_config['dag_kwargs']) as dag:
-    # Оператор Dummy
     start = DummyOperator(
-        task_id='start'
+        task_id='Start'
     )
-
-    # Оператор Python
-    execute_script = PythonOperator(
-        task_id='run_python_script',
-        python_callable=create_file  # Передаем функцию
-    )
-
-    # Еще один Dummy
+    with TaskGroup("Services", dag=dag) as services:
+        start_superset = DummyOperator(
+        task_id="Superset"
+        )
+        
+        start_milvus = DockerOperator(
+            task_id="run_milvus",
+            image="docker:latest",
+            command="docker-compose -f /opt/airflow/databases/Milvus/docker-compose.yml up -d",
+            docker_url="unix://var/run/docker.sock",  # Указываем URL сокета Docker
+            network_mode="host",  # Если нужно использовать хостовую сеть
+            dag=dag,
+        )
+        
+        start_model = DummyOperator(
+            task_id="Model",
+        )
+        
+        start_telegram_bot = DummyOperator(
+            task_id="TelegramBot",
+        )
+        
+        start_superset >> start_model >> start_telegram_bot
+        start_milvus >> start_model >> start_telegram_bot
+    
     end = DummyOperator(
-        task_id='end'
+        task_id='End'
     )
-
-    # Установка последовательности выполнения
-    start >> execute_script >> end
+        
+    start >> services >> end

@@ -67,7 +67,7 @@ async def handle_message(message: Message):
 
     answers = client.search_answer(message.text)
     logging.log("Получили похожие тексты из БД")
-    
+
     final_answer = Model().get_answer(message.text, answers[0]['text'])
     logging.success("Модель ответила на основе них")
 

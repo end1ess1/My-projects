@@ -16,7 +16,7 @@ services:
       - ./model_dashboard:/app/superset_dasboards
       - ./superset_config.py:/app/pythonpath/superset_config.py
       - ./superset_run_commands.sh:/app/superset_run_commands.sh
-      - C:\Users\My End_1ess C\Documents\Диплом\MyGithub\end1ess1\chat_bot_project\Databases\Redis\redis_db_mapping.json:/app/pythonpath/redis_db_mapping.json
+      - ${REDIS_JSON}:/app/pythonpath/redis_db_mapping.json
       - superset_home:/app/superset_home
     networks:
       - superset_apps_network
