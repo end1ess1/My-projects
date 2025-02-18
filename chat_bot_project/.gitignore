@@ -14,6 +14,11 @@ Airflow/scripts/__pycache__/
 Airflow/.env
 Airflow/libs/.env
 Airflow/logs
+Airflow/Dags/.env
+Airflow/webserver_config.py
+Airflow/airflow-webserver.pid
+Airflow/airflow.cfg
+Airflow/bashrc
 
 # Superset
 Superset/.env

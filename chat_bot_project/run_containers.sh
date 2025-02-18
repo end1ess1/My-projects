@@ -9,8 +9,6 @@ echo KILLING OLD DOCKER PROCESSES
 docker-compose -f Databases/PostgreSQL/docker-compose.yml rm -fs
 docker-compose -f Databases/Redis/docker-compose.yml rm -fs
 docker-compose -f Superset/docker-compose.yml rm -fs
-#docker-compose -f Airflow/docker-compose.yml rm -fs
-
 
 echo REMOVING NETWORK:
 docker network rm -f $NETWORK
@@ -18,10 +16,10 @@ echo NETWORK LIST:
 docker network ls
 
 echo DELETING VOLUMES:
-# docker volume rm pgadmin-volume
-# docker volume rm postgres-volume
-# docker volume rm redis-volume
-# docker volume rm superset-volume
+docker volume rm pgadmin-volume
+docker volume rm postgres-volume
+docker volume rm redis-volume
+docker volume rm superset-volume
 
 # Запускаем новые процессы
 echo CREATING NETWORK:
@@ -37,9 +35,6 @@ sleep 5
 
 docker-compose -f Superset/docker-compose.yml build
 docker-compose -f Superset/docker-compose.yml up -d
-
-# docker-compose -f Airflow/docker-compose.yml up airflow-init -d
-# docker-compose -f Airflow/docker-compose.yml up -d
 
 echo ACTIVE CONTAINERS LIST:
 docker ps
