@@ -10,7 +10,6 @@ from pymilvus import (
     Collection,
     utility,
 )
-from pydantic import BaseModel
 
 
 class CollectionConfig:
@@ -23,7 +22,7 @@ class CollectionConfig:
     AUTO_ID: bool = True
 
     @classmethod
-    def get_fields(cls, dimension: int, text_len: int) -> List[FieldSchema]:
+    def get_fields(cls, dimension: int, text_len: int = 10000) -> List[FieldSchema]:
         """Поля для коллекции"""
 
         return [
@@ -32,9 +31,9 @@ class CollectionConfig:
             ),
             FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=dimension),
             FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=text_len),
-            FieldSchema(name="section", dtype=DataType.VARCHAR, max_length=200),
-            FieldSchema(name="subsection", dtype=DataType.VARCHAR, max_length=200),
-            FieldSchema(name="article", dtype=DataType.VARCHAR, max_length=10),
+            FieldSchema(name="section", dtype=DataType.VARCHAR, max_length=2000),
+            FieldSchema(name="subsection", dtype=DataType.VARCHAR, max_length=2000),
+            FieldSchema(name="article", dtype=DataType.VARCHAR, max_length=1000),
         ]
 
 
@@ -48,7 +47,7 @@ class IndexConfig:
 
 
 @dataclass
-class DocumentData(BaseModel):
+class DocumentData:
     """Дата класс документа"""
 
     text: str
@@ -82,7 +81,9 @@ class MilvusDBClient:
         if not self._is_connected:
             raise ConnectionError("Нет коннекшена к Милвусу")
 
-    def create_collection(self, name: str, dimension: int, text_len: int) -> None:
+    def create_collection(
+        self, name: str, dimension: int, text_len: int = 10000
+    ) -> None:
         """Создание коллекции"""
         self._validate_connection()
 

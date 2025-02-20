@@ -1,13 +1,12 @@
 import json
 import os
 import sys
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict
 
 from dotenv import load_dotenv
 from rich.traceback import install
 from tqdm import tqdm
-from pydantic import ValidationError
 
 load_dotenv()
 install(show_locals=True)
@@ -19,24 +18,33 @@ from model_lib import Model
 from log_lib import Log
 
 
-def _get_doc(lib_log: Log, data: Dict[str, str]) -> DocumentData:
-    try:
-        doc_data = DocumentData(
-            text=data["text"],
-            embedding=Model().get_embedding(data["text"]),
-            section=data["metadata"].get("section", "None"),
-            subsection=data["metadata"].get("subsection", "None"),
-            article=data["metadata"].get("article", "None"),
-        )
-        return DocumentData(**doc_data.dict())
-    except ValidationError as e:
-        lib_log.error(f"Data validation error: {e}")
+def _get_doc(data: Dict[str, str]) -> DocumentData:
+    doc_data = DocumentData(
+        text=data["text"],
+        embedding=Model().get_embedding(data["text"]),
+        section=(
+            data["metadata"]["section"]
+            if data["metadata"]["section"] is not None
+            else "None"
+        ),
+        subsection=(
+            data["metadata"]["subsection"]
+            if data["metadata"]["subsection"] is not None
+            else "None"
+        ),
+        article=(
+            data["metadata"]["article"]
+            if data["metadata"]["article"] is not None
+            else "None"
+        ),
+    )
+    return doc_data
 
 
 def get_docs_list(folder: str) -> List[Dict[str, str]]:
     data = []
 
-    for file in os.listdir(folder)[:2]:
+    for file in os.listdir(folder)[:3]:
         if file.endswith(".json"):
             with open(os.path.join(folder, file), "r", encoding="utf-8") as ff:
                 data.extend(json.load(ff))
@@ -47,9 +55,9 @@ def get_docs_list(folder: str) -> List[Dict[str, str]]:
 def load_to_milvus(
     collection_name: str,
     dimension: str,
-    text_len: int,
     script_name: str,
     data: List[Dict[str, str]],
+    text_len: int = 10000,
 ) -> None:
     client = None
     LibLog = Log(*connect_to_databases(), script_name=script_name)
@@ -63,7 +71,7 @@ def load_to_milvus(
         client.create_index()
 
         for doc in tqdm(data):
-            client.insert_document(_get_doc(LibLog, doc))
+            client.insert_document(_get_doc(doc))
 
     except Exception as e:
         LibLog.error(f"Error occurred: {e}", exc_info=True)
@@ -79,9 +87,9 @@ def main():
     EMBEDDING_DIMENSION = len(Model().get_embedding("get len embedding"))
 
     load_to_milvus(
-        collection_name="MyDocs",
+        collection_name="MyDocsNew",
         dimension=EMBEDDING_DIMENSION,
-        text_len=MAX_TEXT_LENGTH,
+        # text_len=MAX_TEXT_LENGTH,
         script_name="loading_to_milvus.py",
         data=DATA,
     )
