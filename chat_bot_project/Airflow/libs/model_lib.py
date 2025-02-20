@@ -64,7 +64,7 @@ class Model(metaclass=MetaClass):
                 api_key=os.getenv("API_KEY"), base_url=os.getenv("BASE_URL")
             )
             embedding = client.embeddings.create(
-                model="text-embedding-3-large", input=text, encoding_format="float"
+                model=os.getenv("EMBEDDING_MODEL"), input=text, encoding_format="float"
             )
             embedding = embedding.data[0].embedding
             norm_embedding = self._normalize_embedding(embedding)

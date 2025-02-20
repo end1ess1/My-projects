@@ -10,6 +10,7 @@ from pymilvus import (
     Collection,
     utility,
 )
+from pydantic import BaseModel
 
 
 class CollectionConfig:
@@ -22,7 +23,7 @@ class CollectionConfig:
     AUTO_ID: bool = True
 
     @classmethod
-    def get_fields(cls, dimension: int) -> List[FieldSchema]:
+    def get_fields(cls, dimension: int, text_len: int) -> List[FieldSchema]:
         """Поля для коллекции"""
 
         return [
@@ -30,10 +31,10 @@ class CollectionConfig:
                 name="id", dtype=DataType.INT64, is_primary=True, auto_id=cls.AUTO_ID
             ),
             FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=dimension),
-            FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=1000),
+            FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=text_len),
             FieldSchema(name="section", dtype=DataType.VARCHAR, max_length=200),
             FieldSchema(name="subsection", dtype=DataType.VARCHAR, max_length=200),
-            FieldSchema(name="article", dtype=DataType.VARCHAR, max_length=50),
+            FieldSchema(name="article", dtype=DataType.VARCHAR, max_length=10),
         ]
 
 
@@ -47,7 +48,7 @@ class IndexConfig:
 
 
 @dataclass
-class DocumentData:
+class DocumentData(BaseModel):
     """Дата класс документа"""
 
     text: str
@@ -81,11 +82,12 @@ class MilvusDBClient:
         if not self._is_connected:
             raise ConnectionError("Нет коннекшена к Милвусу")
 
-    def create_collection(self, name: str, dimension: int) -> None:
+    def create_collection(self, name: str, dimension: int, text_len: int) -> None:
         """Создание коллекции"""
         self._validate_connection()
 
         self.dimension = dimension
+        self.text_len = text_len
 
         if utility.has_collection(name):
             self.collection = Collection(name)
@@ -93,7 +95,7 @@ class MilvusDBClient:
 
         else:
             schema = CollectionSchema(
-                fields=CollectionConfig.get_fields(self.dimension),
+                fields=CollectionConfig.get_fields(self.dimension, self.text_len),
                 description=CollectionConfig.DESCRIPTION,
             )
 

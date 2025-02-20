@@ -73,12 +73,15 @@ async def handle_message(message: Message):
     answers = client.search_answer(message.text)
     logging.log("Получили похожие тексты из БД")
 
-    final_answer = Model().get_answer(message.text, answers[0]["text"])
-    logging.success("Модель ответила на основе них")
+    final_answer = Model(model_type="local").get_answer(
+        message.text,
+        f"""{answers[0]["text"]}\n{answers[1]["text"]}\n{answers[2]["text"]}""",
+    )
+    logging.success("Модель ответила на вопрос пользователя")
 
     await message.answer(final_answer)
 
-    # Для вывода в консоль
+    # Для вывода в консоль и анализа
     pprint(
         f"""
                 Результат #1:
