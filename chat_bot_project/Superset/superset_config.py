@@ -1,8 +1,4 @@
 import os
-import json
-
-with open("/app/pythonpath/redis_db_mapping.json", "r", encoding="utf-8") as file:
-    data = json.load(file)
 
 # Инфо по БД
 DATABASE_NAME = os.getenv("DATABASE_NAME")
@@ -30,7 +26,7 @@ PRESET_DATABASES = {
 # Инфо по Redis
 REDIS_HOST = os.getenv("REDIS_HOST", "redis")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
-REDIS_DB = data["redis_db"]["superset"]
+REDIS_DB = '1'
 
 # Кеширование в Redis
 DATA_CACHE_CONFIG = {

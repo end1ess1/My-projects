@@ -10,7 +10,7 @@ import redis.client
 def connect_to_databases() -> Tuple[psycopg2.extensions.connection, redis.client.Redis]:
 
     load_dotenv()
-    
+
     DATABASE_PORT = os.getenv("DATABASE_PORT")
     DATABASE_DB = os.getenv("DATABASE_DB")
     DATABASE_USER = os.getenv("DATABASE_USER")
@@ -21,13 +21,13 @@ def connect_to_databases() -> Tuple[psycopg2.extensions.connection, redis.client
     REDIS_DB = os.getenv("REDIS_DB")
     REDIS_HOST = os.getenv("REDIS_HOST")
 
-    postgres_connection = psycopg2.connect(dbname=DATABASE_DB,
-                                            user=DATABASE_USER,
-                                            password=DATABASE_PASSWORD,
-                                            host=DATABASE_HOST,
-                                            port=DATABASE_PORT)
-    redis_connection = redis.StrictRedis(db=REDIS_DB,
-                                        host=REDIS_HOST,
-                                        port=REDIS_PORT)
-    
+    postgres_connection = psycopg2.connect(
+        dbname=DATABASE_DB,
+        user=DATABASE_USER,
+        password=DATABASE_PASSWORD,
+        host=DATABASE_HOST,
+        port=DATABASE_PORT,
+    )
+    redis_connection = redis.StrictRedis(db=REDIS_DB, host=REDIS_HOST, port=REDIS_PORT)
+
     return postgres_connection, redis_connection

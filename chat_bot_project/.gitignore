@@ -20,5 +20,9 @@ Airflow/airflow-webserver.pid
 Airflow/airflow.cfg
 Airflow/bashrc
 
+
+chat_bot_project/Databases/Milvus/Milvus_volumes
+
+
 # Superset
 Superset/.env
