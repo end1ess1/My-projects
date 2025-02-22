@@ -1,7 +1,7 @@
 import json
 import os
 import sys
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from typing import List, Dict
 
 from dotenv import load_dotenv
@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 load_dotenv()
 install(show_locals=True)
-sys.path.append(os.getenv("LIBS_PATH_LOCAL"))
+sys.path.append(os.getenv("LIBS_PATH"))
 
 from connection import connect_to_databases
 from milvus_lib import MilvusDBClient, DocumentData
@@ -18,7 +18,7 @@ from model_lib import Model
 from log_lib import Log
 
 
-def _get_doc(data: Dict[str, str]) -> DocumentData:
+def _get_embedded_doc(data: Dict[str, str]) -> DocumentData:
     doc_data = DocumentData(
         text=data["text"],
         embedding=Model().get_embedding(data["text"]),
@@ -44,7 +44,9 @@ def _get_doc(data: Dict[str, str]) -> DocumentData:
 def get_docs_list(folder: str) -> List[Dict[str, str]]:
     data = []
 
-    for file in os.listdir(folder)[:3]:
+    for file in os.listdir(folder)[:1]:
+        print(f"egorabashinforlder: {folder}")
+        print(f"egorabashinfile: {file}")
         if file.endswith(".json"):
             with open(os.path.join(folder, file), "r", encoding="utf-8") as ff:
                 data.extend(json.load(ff))
@@ -52,11 +54,19 @@ def get_docs_list(folder: str) -> List[Dict[str, str]]:
     return data
 
 
+def load_to_db_and_upd_progress_bar(
+    client: MilvusDBClient, doc: Dict[str, str], pbar: tqdm
+) -> None:
+    emb_doc = _get_embedded_doc(doc)
+    client.insert_document(emb_doc)
+    pbar.update(1)
+
+
 def load_to_milvus(
     collection_name: str,
     dimension: str,
     script_name: str,
-    data: List[Dict[str, str]],
+    docs: List[Dict[str, str]],
     text_len: int = 10000,
 ) -> None:
     client = None
@@ -70,8 +80,16 @@ def load_to_milvus(
         )
         client.create_index()
 
-        for doc in tqdm(data):
-            client.insert_document(_get_doc(doc))
+        with tqdm(
+            total=len(docs), desc="Loading docs to Milvus Database", position=0
+        ) as overall_pbar:
+            with ThreadPoolExecutor(max_workers=5) as io_executor:
+                io_executor.map(
+                    lambda doc: load_to_db_and_upd_progress_bar(
+                        client, doc, overall_pbar
+                    ),
+                    docs,
+                )
 
     except Exception as e:
         LibLog.error(f"Error occurred: {e}", exc_info=True)
@@ -81,17 +99,15 @@ def load_to_milvus(
 
 
 def main():
-    FOLDER = os.getenv("DOCS_FOLDER_LOCAL")
-    DATA = get_docs_list(FOLDER)
-    MAX_TEXT_LENGTH = max([len(i["text"]) for i in DATA])
+    FOLDER = os.getenv("DOCS_FOLDER")
+    DOCS = get_docs_list(FOLDER)
     EMBEDDING_DIMENSION = len(Model().get_embedding("get len embedding"))
 
     load_to_milvus(
         collection_name="MyDocsNew",
         dimension=EMBEDDING_DIMENSION,
-        # text_len=MAX_TEXT_LENGTH,
         script_name="loading_to_milvus.py",
-        data=DATA,
+        docs=DOCS,
     )
 
 

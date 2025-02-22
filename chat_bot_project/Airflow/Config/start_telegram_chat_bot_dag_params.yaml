@@ -15,7 +15,7 @@ dag_vars:
     - secrets_handler.py
 
 dag_kwargs:
-  description: Модельный пайплайн для продакшна
+  description: Полный пайплайн запуска Телеграм Бота
   schedule_interval: 0 4 * * *
   catchup: false
   default_args:
