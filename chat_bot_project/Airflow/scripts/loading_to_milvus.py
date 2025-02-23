@@ -44,7 +44,7 @@ def _get_embedded_doc(data: Dict[str, str]) -> DocumentData:
 def get_docs_list(folder: str) -> List[Dict[str, str]]:
     data = []
 
-    for file in os.listdir(folder)[:1]:
+    for file in os.listdir(folder)[:]:
         print(f"egorabashinforlder: {folder}")
         print(f"egorabashinfile: {file}")
         if file.endswith(".json"):
@@ -104,7 +104,7 @@ def main():
     EMBEDDING_DIMENSION = len(Model().get_embedding("get len embedding"))
 
     load_to_milvus(
-        collection_name="MyDocsNew",
+        collection_name="MiigaikDocsInfo",
         dimension=EMBEDDING_DIMENSION,
         script_name="loading_to_milvus.py",
         docs=DOCS,

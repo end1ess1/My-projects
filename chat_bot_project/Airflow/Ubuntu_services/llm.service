@@ -1,0 +1,13 @@
+[Unit]
+Description=LLM Service
+After=network.target
+
+[Service]
+User=egor
+WorkingDirectory=/home/egor
+ExecStart=/bin/bash -c 'cd "/mnt/c/Users/My End_1ess C/Documents/Диплом/llama-b4435-bin-win-cuda-cu11.7-x64/" && ./llama-server.exe -m ../LLM/Gemma-2-9B-It-SPPO-Iter3-Q2_K.gguf -ngl 100 -c 2048 --host 172.26.224.1 --port 5000'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -69,44 +69,36 @@ async def send_welcome(message: Message):
 @handle_errors
 async def handle_message(message: Message):
     question_date = datetime.now()
-
     answers = client.search_answer(message.text)
     logging.log("Получили похожие тексты из БД")
 
-    final_answer = Model(model_type="local").get_answer(
-        message.text,
-        f"""{answers[0]["text"]}\n{answers[1]["text"]}\n{answers[2]["text"]}""",
-    )
+    if answers:
+        final_answer = Model().get_answer(
+            message.text,
+            "\n".join(answer["text"] for answer in answers[:3] if answer.get("text")),
+        )
+    else:
+        final_answer = "Данные по вашему вопросу, к сожалению, не найдены.\nПопробуйте переформулировать вопрос или задать другой."
+
     logging.success("Модель ответила на вопрос пользователя")
 
     await message.answer(final_answer)
 
-    # Для вывода в консоль и анализа
-    pprint(
-        f"""
-                Результат #1:
-                Текст: {answers[0]['text']}
-                Раздел: {answers[0]['section']}
-                Статья: {answers[0]['article']}
-                Схожесть: {1 - answers[0]['distance']:.2%}
+    result = []
+    for i, answer in enumerate(answers[:3], start=1):
+        result.append(
+            f"""
+            Результат #{i}:
+            Текст: {answer.get('text', 'Нет данных')}
+            Раздел: {answer.get('section', 'Нет данных')}
+            Статья: {answer.get('article', 'Нет данных')}
+            Схожесть: {1 - answer.get('distance', 1):.2%}
+            """
+        )
 
-                Результат #2:
-                Текст: {answers[1]['text']}
-                Раздел: {answers[1]['section']}
-                Статья: {answers[1]['article']}
-                Схожесть: {1 - answers[1]['distance']:.2%}
+    result.append(f"----\n\nОтвет: {final_answer}")
 
-                Результат #3:
-                Текст: {answers[2]['text']}
-                Раздел: {answers[2]['section']}
-                Статья: {answers[2]['article']}
-                Схожесть: {1 - answers[2]['distance']:.2%}
-                
-                ----
-                
-                Ответ: {final_answer}
-                """
-    )
+    pprint("".join(result))
 
     answer_date = datetime.now()
 
@@ -135,7 +127,8 @@ if __name__ == "__main__":
 
     client = MilvusDBClient(LibLog=logging)
     client.connect()
-    client.create_collection(name="test", dimension=3072)
+    client.create_collection(name="MyDocsNew", dimension=3072)
+    # client.create_collection(name="MiigaikDocsInfo", dimension=3072)
     client.create_index()
 
     logging.log("Инициализация Бота")
