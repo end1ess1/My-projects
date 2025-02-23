@@ -45,8 +45,6 @@ def get_docs_list(folder: str) -> List[Dict[str, str]]:
     data = []
 
     for file in os.listdir(folder)[:]:
-        print(f"egorabashinforlder: {folder}")
-        print(f"egorabashinfile: {file}")
         if file.endswith(".json"):
             with open(os.path.join(folder, file), "r", encoding="utf-8") as ff:
                 data.extend(json.load(ff))

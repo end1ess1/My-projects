@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=egor
 WorkingDirectory=/home/egor
-ExecStart=/bin/bash -c 'cd $HOME && source airflow_env/bin/activate && cd "/mnt/c/Users/My End_1ess C/Documents/Диплом/MyGithub/end1ess1/chat_bot_project/Airflow/Scripts" && python3 telegram_bot.py'
+ExecStart=/bin/bash -c 'cd $HOME && source airflow_env/bin/activate && cd "/mnt/c/Users/My End_1ess C/Documents/Диплом/MyGithub/end1ess1/chat_bot_project/Airflow/Scripts" && stdbuf -oL -eL python3 telegram_bot.py'
 Restart=always
 RestartSec=5
 

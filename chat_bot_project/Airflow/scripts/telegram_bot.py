@@ -7,10 +7,11 @@ from datetime import datetime
 from dotenv import load_dotenv
 from pprint import pprint
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from rich.traceback import install
+from pymilvus.model.reranker import CrossEncoderRerankFunction
 
 from connection import connect_to_databases
 
@@ -68,8 +69,10 @@ async def send_welcome(message: Message):
 
 @handle_errors
 async def handle_message(message: Message):
+    print(f"Вопрос пользователя: {message.text}")  # Для отображения в логах
     question_date = datetime.now()
-    answers = client.search_answer(message.text)
+    answers = client.search_answer(question=message.text, reranker=reranker)
+    # answers = client.search_answer(question=message.text)
     logging.log("Получили похожие тексты из БД")
 
     if answers:
@@ -83,6 +86,12 @@ async def handle_message(message: Message):
     logging.success("Модель ответила на вопрос пользователя")
 
     await message.answer(final_answer)
+
+    # keyboard = InlineKeyboardMarkup().add(
+    #     InlineKeyboardButton("Да", callback_data="feedback_yes"),
+    #     InlineKeyboardButton("Нет", callback_data="feedback_no"),
+    # )
+    # await message.answer(final_answer, reply_markup=keyboard)
 
     result = []
     for i, answer in enumerate(answers[:3], start=1):
@@ -105,6 +114,16 @@ async def handle_message(message: Message):
     await log_message(message, final_answer, question_date, answer_date)
 
 
+# @DP.callback_query_handler(lambda c: c.data.startswith("feedback_"))
+# async def handle_feedback(callback_query: types.CallbackQuery):
+#     feedback = (
+#         "Спасибо за ваш отзыв!"
+#         if callback_query.data == "feedback_yes"
+#         else "Жаль, что ответ не помог. Мы улучшимся!"
+#     )
+#     await BOT.answer_callback_query(callback_query.id, feedback)
+
+
 async def main(DP, BOT):
     @DP.message(Command("start"))
     async def on_start(message: Message):
@@ -118,8 +137,9 @@ async def main(DP, BOT):
 
 
 if __name__ == "__main__":
+    os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
-    SCRIPT_NAME = "test_postgre_sql.py"
+    SCRIPT_NAME = "telegram_bot.py"
 
     logging = Log(*connect_to_databases(), SCRIPT_NAME)
     ChatHistory = ChatHistory(*connect_to_databases(), SCRIPT_NAME)
@@ -127,9 +147,13 @@ if __name__ == "__main__":
 
     client = MilvusDBClient(LibLog=logging)
     client.connect()
-    client.create_collection(name="MyDocsNew", dimension=3072)
-    # client.create_collection(name="MiigaikDocsInfo", dimension=3072)
+    client.create_collection(name="MiigaikDocsInfo", dimension=3072)
     client.create_index()
+
+    reranker = CrossEncoderRerankFunction(
+        model_name=os.getenv("RERANKER_MODEL"),
+        device="cpu",
+    )
 
     logging.log("Инициализация Бота")
 

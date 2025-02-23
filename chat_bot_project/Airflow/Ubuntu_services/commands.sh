@@ -14,7 +14,8 @@ sudo nano /etc/systemd/system/telegram_bot.service
 # [Install]
 # WantedBy=multi-user.target
 
-sudo systemctl daemon-reload # для того чтобы увидел службу
+sudo systemctl daemon-reload # для того чтобы система увидела службу
+sudo systemctl disable telegram_bot.service # отключаем автозагрузку
 
 sudo systemctl start telegram_bot.service
 sudo systemctl stop telegram_bot.service

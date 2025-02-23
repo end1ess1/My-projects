@@ -1,5 +1,5 @@
 from log_lib import Log
-from typing import List, Optional
+from typing import List, Optional, Dict
 from dataclasses import dataclass
 from model_lib import Model
 from pymilvus import (
@@ -10,6 +10,7 @@ from pymilvus import (
     Collection,
     utility,
 )
+from pymilvus.model.reranker import CrossEncoderRerankFunction
 
 
 class CollectionConfig:
@@ -156,7 +157,33 @@ class MilvusDBClient:
             self.logging.error(f"Ошибка вставки: {e}")
             raise
 
-    def search_answer(self, question: str, model_type: str = "notLocal", top_k=3):
+    def rerank_docs(
+        self,
+        reranker: CrossEncoderRerankFunction,
+        search_results: List[Dict[str, str]],
+        question: str,
+    ):
+
+        reranked_results = reranker(
+            query=question, documents=[c["text"] for c in search_results], top_k=3
+        )
+
+        final_results = []
+        for reranked in reranked_results:
+            for c in search_results:
+                if c["text"] == reranked.text:
+                    final_results.append({**c, "score": reranked.score})
+                    break
+
+        return final_results
+
+    def search_answer(
+        self,
+        question: str,
+        model_type: str = "notLocal",
+        reranker: CrossEncoderRerankFunction = None,
+        top_k=10,
+    ):
         embedding = Model(model_type=model_type).get_embedding(question)
 
         if not embedding or len(embedding) != self.dimension:
@@ -175,7 +202,7 @@ class MilvusDBClient:
                 output_fields=["text", "section", "article"],
             )
 
-            return [
+            search_results = [
                 {
                     "text": hit.entity.get("text"),
                     "section": hit.entity.get("section"),
@@ -184,6 +211,11 @@ class MilvusDBClient:
                 }
                 for hit in results[0]
             ]
+
+            if reranker:
+                return self.rerank_docs(reranker, search_results, question)
+            else:
+                return search_results
 
         except Exception as e:
             self.logging.warning(f"Ошибка поиска: {str(e)}")
