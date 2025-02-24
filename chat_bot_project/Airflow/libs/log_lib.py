@@ -19,6 +19,7 @@ class ChatHistoryConfig(metaclass=MetaClass):
     chat_id: str
     question: str
     answer: str
+    feedback: str
     question_date: datetime
     answer_date: datetime
     language_code: str
@@ -39,6 +40,7 @@ class RedisConfig:
             "chat_id": str(c.chat_id),
             "question": str(c.question),
             "answer": str(c.answer),
+            "feedback": str(c.feedback),
             "question_length": str(len(c.question)),
             "answer_length": str(len(c.answer)),
             "response_time_s": str((c.answer_date - c.question_date).total_seconds()),
@@ -110,6 +112,7 @@ class PostgreConfig:
                     chat_id,
                     question,
                     answer,
+                    feedback,
                     question_length,
                     answer_length,
                     response_time_s,
@@ -126,6 +129,7 @@ class PostgreConfig:
                     '{c.chat_id}',
                     '{str(c.question)}',
                     '{str(c.answer)}',
+                    '{str(c.feedback)}',
                     '{str(len(c.question))}',
                     '{str(len(c.answer))}',
                     '{(c.answer_date-c.question_date).total_seconds()}',

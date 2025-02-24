@@ -79,9 +79,6 @@ class Model(metaclass=MetaClass):
             base_url = os.getenv("BASE_URL")
             api_key = os.getenv("API_KEY")
 
-        print(base_url)
-        print(api_key)
-
         client = OpenAI(base_url=base_url, api_key=api_key)
 
         completion = client.chat.completions.create(

@@ -1,6 +1,6 @@
 INSERT INTO llm_logs (
     user_id, first_name, last_name, username, chat_id, 
-    question, answer, question_length, answer_length, response_time_s, 
+    question, answer, feedback, question_length, answer_length, response_time_s, 
     language_code, question_date, answer_date, model_version
 )
 SELECT
@@ -32,7 +32,8 @@ SELECT
         'МИИГАиК занимается исследованиями в области спутниковой геодезии, фотограмметрии, ГИС и дистанционного зондирования Земли.',
         'Расписание занятий доступно в личном кабинете студента на сайте университета и на стендах факультетов.',
         'Библиотека МИИГАиК работает по будням и предлагает доступ к научной литературе и электронным ресурсам.'
-    ])[floor(random() * 10) + 1] AS answer,  
+    ])[floor(random() * 10) + 1] AS answer,
+    (ARRAY['Да', 'Нет'])[floor(random() * 2) + 1] as feedback,
     length((ARRAY[
         'Где находится главный корпус МИИГАиК?',
         'Какие направления подготовки есть в МИИГАиК?',

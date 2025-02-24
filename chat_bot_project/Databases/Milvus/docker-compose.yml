@@ -14,7 +14,7 @@ services:
       - etcd_data:/etcd
       - ${VOLUME_PATH}:/etcd
     healthcheck:
-      test: ["CMD", "etcdctl", "endpoint", "health"]
+      test: [ "CMD", "etcdctl", "endpoint", "health" ]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -33,11 +33,11 @@ services:
       - milvus_apps_network
     volumes:
       - milvus_data:/var/lib/milvus
-      - ${VOLUME_PATH}:/var/lib/milvus
+      - ${VOLUME_PATH_LOCAL}:/var/lib/milvus
     depends_on:
       etcd:
         condition: service_healthy
-    command: ["milvus", "run", "standalone"]
+    command: [ "milvus", "run", "standalone" ]
 
   attu:
     container_name: attu

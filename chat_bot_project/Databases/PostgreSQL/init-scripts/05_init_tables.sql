@@ -8,6 +8,7 @@ CREATE TABLE llm_logs (
     chat_id BIGINT NOT NULL, 
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
+    feedback TEXT NOT NULL,
     question_length INT NOT NULL,
     answer_length INT NOT NULL,
     response_time_s DECIMAL(10,6) NOT NULL,
@@ -27,9 +28,10 @@ COMMENT ON COLUMN llm_logs.user_id IS 'ID юзера';
 COMMENT ON COLUMN llm_logs.chat_id IS 'ID сессии';
 COMMENT ON COLUMN llm_logs.question IS 'Вопрос, заданный юзером';
 COMMENT ON COLUMN llm_logs.answer IS 'Ответ, предоставленный моделью';
+COMMENT ON COLUMN llm_logs.feedback IS 'Обратная связь пользователя по поводу ответа';
 COMMENT ON COLUMN llm_logs.question_length IS 'Количество символов в вопросе юзера';
 COMMENT ON COLUMN llm_logs.answer_length IS 'Количество символов в ответе модели';
-COMMENT ON COLUMN llm_logs.response_time_ms IS 'Время ответа модели в секундах';
+COMMENT ON COLUMN llm_logs.response_time_s IS 'Время ответа модели в секундах';
 COMMENT ON COLUMN llm_logs.language_code IS 'Язык ответа модели (например, ru, en)';
 COMMENT ON COLUMN llm_logs.model_version IS 'Версия модели, использованной для ответа';
 COMMENT ON COLUMN llm_logs.question_date IS 'Дата вопроса для модели';
