@@ -4,25 +4,26 @@
 # PyCache
 /__pycache__/
 
-# Private Files
-Airflow/scripts/commands.sh
-Airflow/scripts/project.py
-Airflow/scripts/.env
-Airflow/scripts/__pycache__/
+# Commands .sh
+/model_run.sh
+/run_airflow.sh
+/run_containers.sh
+
+# SuperSet
+/Superset/.env
+/Superset/model_dashboard
+
+# Databases
+/Databases/PostgreSQL/.env
+/Databases/Milvus/.env
+/Databases/Milvus/Milvus_volumes/
 
 # Airflow
-Airflow/.env
-Airflow/libs/.env
-Airflow/logs
-Airflow/Dags/.env
-Airflow/webserver_config.py
-Airflow/airflow-webserver.pid
-Airflow/airflow.cfg
-Airflow/bashrc
-
-
-chat_bot_project/Databases/Milvus/Milvus_volumes
-
-
-# Superset
-Superset/.env
+/Airflow/.env
+/Airflow/Dags/__pycache__
+/Airflow/Dags/.env
+/Airflow/Libs/__pycache__
+/Airflow/Libs/.env
+/Airflow/logs
+/Airflow/Scripts/__pycache__
+/Airflow/Scripts/.env
