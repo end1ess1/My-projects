@@ -34,7 +34,7 @@ class CollectionConfig:
             FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=text_len),
             FieldSchema(name="section", dtype=DataType.VARCHAR, max_length=2000),
             FieldSchema(name="subsection", dtype=DataType.VARCHAR, max_length=2000),
-            FieldSchema(name="article", dtype=DataType.VARCHAR, max_length=1000),
+            FieldSchema(name="keywords", dtype=DataType.VARCHAR, max_length=1000),
         ]
 
 
@@ -55,7 +55,7 @@ class DocumentData:
     embedding: List[float]
     section: str
     subsection: str
-    article: str
+    keywords: str
 
 
 class MilvusDBClient:
@@ -147,7 +147,7 @@ class MilvusDBClient:
             [document.text],
             [document.section],
             [document.subsection],
-            [document.article],
+            [document.keywords],
         ]
 
         try:
@@ -199,14 +199,14 @@ class MilvusDBClient:
                 anns_field="embedding",
                 param={"metric_type": "L2", "params": {"nprobe": 10}},
                 limit=top_k,
-                output_fields=["text", "section", "article"],
+                output_fields=["text", "section", "keywords"],
             )
 
             search_results = [
                 {
                     "text": hit.entity.get("text"),
                     "section": hit.entity.get("section"),
-                    "article": hit.entity.get("article"),
+                    "keywords": hit.entity.get("keywords"),
                     "distance": hit.distance,
                 }
                 for hit in results[0]

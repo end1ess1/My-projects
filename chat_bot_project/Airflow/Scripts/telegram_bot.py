@@ -45,7 +45,7 @@ async def log_message(
     answer: str,
     question_date: datetime,
     answer_date: datetime,
-    feedback: str,
+    feedback: str = "None",
 ):
     __dicting__ = {
         "user_id": message.from_user.id,
@@ -81,11 +81,12 @@ async def send_welcome(message: Message):
 async def handle_message(message: Message):
     print(f"Вопрос пользователя: {message.text}")  # Для отображения в логах
     question_date = datetime.now()
-    answers = client.search_answer(question=message.text, reranker=reranker)
+    # answers = client.search_answer(question=message.text, reranker=reranker)
+    answers = client.search_answer(question=message.text)
     logging.log("Получили похожие тексты из БД")
 
     if answers:
-        final_answer = Model().get_answer(
+        final_answer = Model(model_type="local").get_answer(
             message.text,
             "\n".join(answer["text"] for answer in answers[:3] if answer.get("text")),
         )

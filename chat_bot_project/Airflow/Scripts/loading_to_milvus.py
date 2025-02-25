@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 load_dotenv()
 install(show_locals=True)
-sys.path.append(os.getenv("LIBS_PATH"))
+sys.path.append(os.getenv("LIBS_PATH_LOCAL"))
 
 from connection import connect_to_databases
 from milvus_lib import MilvusDBClient, DocumentData
@@ -97,7 +97,7 @@ def load_to_milvus(
 
 
 def main():
-    FOLDER = os.getenv("DOCS_FOLDER")
+    FOLDER = os.getenv("DOCS_FOLDER_LOCAL")
     DOCS = get_docs_list(FOLDER)
     EMBEDDING_DIMENSION = len(Model().get_embedding("get len embedding"))
 
