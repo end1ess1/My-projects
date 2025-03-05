@@ -9,8 +9,13 @@ from pymilvus import (
     DataType,
     Collection,
     utility,
+    AnnSearchRequest,
+    Function,
+    FunctionType,
+    RRFRanker,
 )
 from pymilvus.model.reranker import CrossEncoderRerankFunction
+from pymorphy3 import MorphAnalyzer
 
 
 class CollectionConfig:
@@ -30,18 +35,24 @@ class CollectionConfig:
             FieldSchema(
                 name="id", dtype=DataType.INT64, is_primary=True, auto_id=cls.AUTO_ID
             ),
-            FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=dimension),
-            FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=text_len),
+            FieldSchema(name="dense", dtype=DataType.FLOAT_VECTOR, dim=dimension),
+            FieldSchema(name="sparse", datatype=DataType.SPARSE_FLOAT_VECTOR),
+            FieldSchema(
+                name="text",
+                dtype=DataType.VARCHAR,
+                max_length=text_len,
+                enable_analyzer=True,
+            ),
             FieldSchema(name="section", dtype=DataType.VARCHAR, max_length=2000),
             FieldSchema(name="subsection", dtype=DataType.VARCHAR, max_length=2000),
-            FieldSchema(name="keywords", dtype=DataType.VARCHAR, max_length=1000),
+            FieldSchema(name="keywords", dtype=DataType.VARCHAR, max_length=2000),
         ]
 
 
 class IndexConfig:
     """Конфиг для индексов Malvus БД"""
 
-    EMBEDDING_INDEX_NAME = "embedding_idx"
+    EMBEDDING_INDEX_NAME = "dense_embedding"
     INDEX_TYPE = "IVF_FLAT"
     METRIC_TYPE = "L2"
     INDEX_PARAMS = {"nlist": 128}
@@ -52,7 +63,7 @@ class DocumentData:
     """Дата класс документа"""
 
     text: str
-    embedding: List[float]
+    dense: List[float]
     section: str
     subsection: str
     keywords: str
@@ -101,6 +112,15 @@ class MilvusDBClient:
                 description=CollectionConfig.DESCRIPTION,
             )
 
+            bm25_function = Function(
+                name="text_bm25_emb",
+                input_field_names=["text"],
+                output_field_names=["sparse"],
+                function_type=FunctionType.BM25,
+            )
+
+            schema.add_function(bm25_function)
+
             self.collection = Collection(
                 name=name,
                 schema=schema,
@@ -126,10 +146,21 @@ class MilvusDBClient:
             }
 
             self.collection.create_index(
-                field_name="embedding",
+                field_name="dense",
                 index_params=index_params,
                 index_name=IndexConfig.EMBEDDING_INDEX_NAME,
             )
+
+            index_params = {
+                "index_type": "SPARSE_INVERTED_INDEX",
+                "metric_type": "BM25",
+                "params": {},
+            }
+
+            self.collection.create_index(
+                field_name="sparse", index_params=index_params, index_name="sparse_emb"
+            )
+
             self.collection.load()
             self.logging.log("Индекс успешно создан")
 
@@ -143,7 +174,7 @@ class MilvusDBClient:
             raise ValueError("Коллекция не инициализирована")
 
         entities = [
-            [document.embedding],
+            [document.dense],
             [document.text],
             [document.section],
             [document.subsection],
@@ -157,7 +188,7 @@ class MilvusDBClient:
             self.logging.error(f"Ошибка вставки: {e}")
             raise
 
-    def rerank_docs(
+    def _rerank_docs(
         self,
         reranker: CrossEncoderRerankFunction,
         search_results: List[Dict[str, str]],
@@ -177,6 +208,12 @@ class MilvusDBClient:
 
         return final_results
 
+    def _lemmatize(self, text):
+        words = text.split()
+        lemmas = [MorphAnalyzer().parse(word)[0].normal_form for word in words]
+
+        return lemmas
+
     def search_answer(
         self,
         question: str,
@@ -194,11 +231,28 @@ class MilvusDBClient:
             raise ValueError("Коллекция не инициализирована")
 
         try:
-            results = self.collection.search(
+            # Полнотекстовый поиск
+            req1 = AnnSearchRequest(
+                data=[question],
+                anns_field="sparse",
+                param={"params": {"drop_ratio_search": 0.2}, "metric_type": "BM25"},
+                limit=2,
+            )
+
+            # Векторное сходство
+            req2 = AnnSearchRequest(
                 data=[embedding],
-                anns_field="embedding",
-                param={"metric_type": "L2", "params": {"nprobe": 10}},
-                limit=top_k,
+                anns_field="dense",
+                param={"metric_type": "IP", "params": {"nprobe": 10}},
+                limit=2,
+            )
+
+            # Гибридный поиск
+            results = self.collection.hybrid_search(
+                collection_name="hybrid_search_collection",
+                reqs=[req1, req2],
+                ranker=RRFRanker(100),
+                limit=3,
                 output_fields=["text", "section", "keywords"],
             )
 
@@ -213,7 +267,7 @@ class MilvusDBClient:
             ]
 
             if reranker:
-                return self.rerank_docs(reranker, search_results, question)
+                return self._rerank_docs(reranker, search_results, question)
             else:
                 return search_results
 

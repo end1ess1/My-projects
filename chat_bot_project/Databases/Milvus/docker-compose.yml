@@ -21,7 +21,7 @@ services:
 
   milvus:
     container_name: milvus
-    image: milvusdb/milvus:v2.3.0
+    image: milvusdb/milvus:v2.5.4
     environment:
       - ETCD_ENABLED=true
       - ETCD_ENDPOINTS=etcd:2379

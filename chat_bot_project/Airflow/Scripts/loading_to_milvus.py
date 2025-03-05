@@ -4,6 +4,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Dict
 
+from pymorphy3 import MorphAnalyzer
 from dotenv import load_dotenv
 from rich.traceback import install
 from tqdm import tqdm
@@ -18,10 +19,18 @@ from model_lib import Model
 from log_lib import Log
 
 
+# def _get_key_words(text):
+#     unique_words = list(set(text.split()))
+#     lemmas = [MorphAnalyzer().parse(word)[0].normal_form for word in unique_words]
+#     uniq_lemmas = list(set(lemmas))
+
+#     return " ".join(uniq_lemmas)
+
+
 def _get_embedded_doc(data: Dict[str, str]) -> DocumentData:
     doc_data = DocumentData(
         text=data["text"],
-        embedding=Model().get_embedding(data["text"]),
+        dense=Model().get_embedding(data["text"]),
         section=(
             data["metadata"]["section"]
             if data["metadata"]["section"] is not None
@@ -32,9 +41,9 @@ def _get_embedded_doc(data: Dict[str, str]) -> DocumentData:
             if data["metadata"]["subsection"] is not None
             else "None"
         ),
-        article=(
-            data["metadata"]["article"]
-            if data["metadata"]["article"] is not None
+        keywords=(
+            data["metadata"]["keywords"]
+            if data["metadata"]["keywords"] is not None
             else "None"
         ),
     )
@@ -44,7 +53,7 @@ def _get_embedded_doc(data: Dict[str, str]) -> DocumentData:
 def get_docs_list(folder: str) -> List[Dict[str, str]]:
     data = []
 
-    for file in os.listdir(folder)[:]:
+    for file in os.listdir(folder)[:1]:
         if file.endswith(".json"):
             with open(os.path.join(folder, file), "r", encoding="utf-8") as ff:
                 data.extend(json.load(ff))
