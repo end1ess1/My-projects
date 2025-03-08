@@ -63,8 +63,8 @@ This project is a Telegram bot designed to assist students of the Moscow State U
 
 <h1></h1>
 
-📂 **Airflow**: [open](https://github.com/end1ess1/end1ess1/tree/develop/chat_bot_project/Airflow)
+📂 **Airflow**: [открыть](https://github.com/end1ess1/end1ess1/tree/develop/chat_bot_project/Airflow)
 
-📂 **Superset**: [open](https://github.com/end1ess1/end1ess1/tree/develop/chat_bot_project/Superset)
+📂 **Superset**: [открыть](https://github.com/end1ess1/end1ess1/tree/develop/chat_bot_project/Superset)
 
-📂 **DataBases**: [open](https://github.com/end1ess1/end1ess1/tree/develop/chat_bot_project/Databases)
+📂 **DataBases**: [открыть](https://github.com/end1ess1/end1ess1/tree/develop/chat_bot_project/Databases)
