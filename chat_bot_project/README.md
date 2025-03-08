@@ -1,7 +1,7 @@
 <h1 align="center">🚀 Student Helper Bot</h1>
 <h3 align="center">✨ Your AI Assistant for MIIGAiK</h3>
 
-ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=telegramBot.start())](https://git.io/typing-svg)
+ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=bot.online+=+true;+students.happy+=+true)](https://git.io/typing-svg)
 
 <h3 align="center">🌍 English Version</h3>
 
