@@ -2,7 +2,7 @@
 <h3 align="center">✨ Your AI Assistant for MIIGAiK</h3>
 <div align="center">
   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&width=600&lines=🌟+Сделай+свою+студенческую+жизнь+проще!;🧠+Вузовский+FAQ,+который+знает+больше+деканата!;🎓+Стипендия+—+это+не+миф,+и+я+докажу+это!;📜+Документы,+дедлайны,+стипендии+—+я+разберусь+за+тебя!&speed=100&pause=1)](https://git.io/typing-svg)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&width=600&lines=🌟+Сделай+свою+студенческую+жизнь+проще!;🧠+Вузовский+FAQ,+который+знает+больше+деканата!;🎓+Стипендия+—+это+не+миф,+и+я+докажу+это!;📜+Документы,+дедлайны,+стипендии+—+я+разберусь+за+тебя!&speed=100&pause=1)](https://git.io/typing-svg)
 </div>
 
 <h3 align="center">🌍 English Version</h3>
